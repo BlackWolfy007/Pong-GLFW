@@ -6,6 +6,8 @@ extern float ratio;
 
 void Draw_Pixel(float x, float y);
 
+void Draw_Num(int num, float x, float y);
+
 void Draw_0(float x, float y);
 void Draw_1(float x, float y);
 void Draw_2(float x, float y);

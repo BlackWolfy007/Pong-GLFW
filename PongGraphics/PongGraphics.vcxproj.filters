@@ -24,12 +24,18 @@
     <ClCompile Include="Game.c">
       <Filter>Исходные файлы</Filter>
     </ClCompile>
+    <ClCompile Include="Game_Draw.c">
+      <Filter>Исходные файлы</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Draw_Text.h">
       <Filter>Файлы заголовков</Filter>
     </ClInclude>
     <ClInclude Include="Game.h">
+      <Filter>Файлы заголовков</Filter>
+    </ClInclude>
+    <ClInclude Include="Game_Draw.h">
       <Filter>Файлы заголовков</Filter>
     </ClInclude>
   </ItemGroup>

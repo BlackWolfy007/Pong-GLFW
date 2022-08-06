@@ -4,8 +4,8 @@
 #include <GLFW/glfw3.h>
 #include "linmath.h"
 #include "Draw_Text.h"
-
-void Game_Init();
+#include "Game.h"
+#include "Game_Draw.h"
 
 //float ratio;
 
@@ -16,23 +16,6 @@ void Render_Window();
 void Destroy_Window();
 
 static GLFWwindow* window;
-
-
-
-typedef struct Racket {
-	float x;
-	float y;
-	float x_size;
-	float y_size;
-} T_Racket;
-
-typedef struct Ball {
-	float x;
-	float y;
-	float dx;
-	float dy;
-	float radius;
-} T_Ball;
 
 int main(void) {
 	Init_Window();
@@ -48,72 +31,49 @@ void Destroy_Window() {
 	exit(EXIT_SUCCESS);
 }
 
-void DrawCircle(float r, float g, float b, float x, float y, float DEG2RAD, float radius, float ratio) {
-    glColor3f(r, g, b);
-    glBegin(GL_POLYGON);
-    for (int i = 0; i < 360; i++) {
-        glVertex2d((cos(DEG2RAD * i) * radius + x), (sin(DEG2RAD * i) * radius*ratio + y));
-    }
-    glEnd();
-}
-
 void Render_Window() {
+    
+  T_Ball Ball = {0, 0, 0.01, 0.001, 0.03, 1, {0.95, 0.95, 0.95}};
+  T_Racket Left_Rack = {-0.92, 0, 0.03, 0.20, {1, 1, 1}},
+           Right_Rack = {0.92, 0, 0.03, 0.20, {1, 1, 1}};
+  T_Score Score = {0, 0};
+  float dy_change = 0.007;
 
     while (!glfwWindowShouldClose(window)) {
+      
         // Setup view
         int width, height;
         glfwGetFramebufferSize(window, &width, &height);
         ratio = width / (float)height;
         glViewport(0, 0, width, height);
         glClear(GL_COLOR_BUFFER_BIT);
-
+        
         //Draw_Nums_Test();
         //Draw_P1W();
-        Draw_P2W();
+        //Draw_P2W();
+        if (Score.Player_1 < 21 && Score.Player_2 < 21) {
+          // Key Check
+          Keystroke(window, &Left_Rack, &Right_Rack, dy_change);
 
+          Ball_Movement(&Ball);
+
+          Draw_Score(Score);
+          Draw_Racket(Left_Rack);
+          Draw_Racket(Right_Rack);
+          Draw_Ball(Ball);
+
+        } else {
+          if (Score.Player_1 >= 21) {
+            Draw_P1W();
+          } else {
+            Draw_P2W();
+          }
+        }
         // Swap buffers
         glfwSwapBuffers(window);
         glfwPollEvents();
     }
 
-}
-
-
-
-void Game_Init() {
-    const float DEG2RAD = 3.14159 / 100;
-    float radius = 0.03;
-
-    float r = 1, g = 1, b = 1;
-    float speedmult = 1;
-    float increase = 5;
-    float x = 0, y = 0, dx = 0.01 * speedmult, dy = 0.001 * speedmult;
-
-    // Movement
-    if ((x + dx < 1 - radius) && (x + dx > -1 + radius))
-        x += dx;
-    else {
-        dx *= -1;
-        if (dx < 0.8) speedmult *= increase;
-    }
-    if ((y + dy < (1 - radius * ratio)) && (y + dy > (-1 + radius * ratio))) {
-        y += dy;
-    }
-    else {
-        dy *= -1;
-        if (dy < 0.8) speedmult *= increase;
-    }
-    if (speedmult > pow(increase, 3)) {
-        if (dx < 0.8) dx *= 1.05;
-        if (dy < 0.8) dy *= 1.05;
-        speedmult = 1;
-    }
-    // Color
-    //r = fmod(r + 0.001, 1);
-    //g = fmod(g + 0.002, 1);
-    //b = fmod(b + 0.003, 1);
-    // Drawing
-    DrawCircle(r, g, b, x, y, DEG2RAD, radius, ratio);
 }
 
 void Init_Window() {

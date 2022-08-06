@@ -76,6 +76,51 @@ void Draw_Pixel(float x, float y) {
     glEnd();
 }
 
+void Draw_Num(int num, float x, float y) {
+  switch (num) {
+    case 0: {
+      Draw_0(x, y);
+      break;
+    }
+    case 1: {
+      Draw_1(x, y);
+      break;
+    }
+    case 2: {
+      Draw_2(x, y);
+      break;
+    }
+    case 3: {
+      Draw_3(x, y);
+      break;
+    }
+    case 4: {
+      Draw_4(x, y);
+      break;
+    }
+    case 5: {
+      Draw_5(x, y);
+      break;
+    }
+    case 6: {
+      Draw_6(x, y);
+      break;
+    }
+    case 7: {
+      Draw_7(x, y);
+      break;
+    }
+    case 8: {
+      Draw_8(x, y);
+      break;
+    }
+    case 9: {
+      Draw_9(x, y);
+      break;
+    }
+  }
+}
+
 void Draw_0(float x, float y) {
     for (float i = -2 + y; i < 3 + y; i++) {
         for (float j = -1 + x; j < 2 + x; j++) {
