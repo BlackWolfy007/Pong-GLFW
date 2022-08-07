@@ -51,11 +51,11 @@ void Render_Window() {
         //Draw_Nums_Test();
         //Draw_P1W();
         //Draw_P2W();
-        if (Score.Player_1 < 21 && Score.Player_2 < 21) {
+        if (Score.Player_1 < final_score && Score.Player_2 < final_score) {
           // Key Check
-          Keystroke(window, &Left_Rack, &Right_Rack, dy_change);
+          Keystroke(window,&Ball, &Left_Rack, &Right_Rack, dy_change);
 
-          Ball_Movement(&Ball);
+          Ball_Collide(&Ball,&Left_Rack,&Right_Rack, &Score);
 
           Draw_Score(Score);
           Draw_Racket(Left_Rack);
@@ -63,10 +63,14 @@ void Render_Window() {
           Draw_Ball(Ball);
 
         } else {
-          if (Score.Player_1 >= 21) {
+          if (Score.Player_1 >= final_score) {
             Draw_P1W();
+            if (glfwGetKey(window, GLFW_KEY_ESCAPE) == GLFW_PRESS)
+              glfwSetWindowShouldClose(window, 1);
           } else {
             Draw_P2W();
+            if (glfwGetKey(window, GLFW_KEY_ESCAPE) == GLFW_PRESS)
+              glfwSetWindowShouldClose(window, 1);
           }
         }
         // Swap buffers

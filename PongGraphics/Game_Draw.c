@@ -2,7 +2,7 @@
 
 float ratio;
 
-const float DEG2RAD = 3.14159 / 100;
+const float DEG2RAD;
 
 void Draw_Ball(T_Ball bll) {
   glColor3f(bll.color.r, bll.color.g, bll.color.b);
@@ -50,7 +50,7 @@ void Draw_Score(T_Score score) {
     if (i < 0) {
       Draw_Num((i < -5) ? score.Player_1 / 10 : score.Player_1 % 10, i, y);
     } else if (i > 0) {
-      Draw_Num((i < 5) ? score.Player_1 / 10 : score.Player_1 % 10, i, y);
+      Draw_Num((i < 5) ? score.Player_2 / 10 : score.Player_2 % 10, i, y);
     } else {
       Draw_Colon(i, y);
     }

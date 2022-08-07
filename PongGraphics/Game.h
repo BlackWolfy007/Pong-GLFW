@@ -35,10 +35,26 @@ typedef struct Score {
 
 extern float ratio;
 
+extern const int final_score;
+
+extern const float DEG2RAD;
+
 void Move_Racket(T_Racket* racket, float dy);
-void Ball_Movement(T_Ball* ball);
+int Racket_Collide(T_Ball* ball, T_Racket* Left_Rack, T_Racket* Right_Rack);
+int Border_X_Left_Collide(T_Ball* ball);
+int Border_X_Right_Collide(T_Ball* ball);
+int Border_Y_Up_Collide(T_Ball* ball);
+int Border_Y_Down_Collide(T_Ball* ball);
+
+
+int Border_X_Collide(T_Ball* ball);
+int Border_Y_Collide(T_Ball* ball);
+void Ball_Collide(T_Ball* ball, T_Racket* Left_Rack, T_Racket* Right_Rack,
+                  T_Score* Score);
 void Increase_Player_1(T_Score* score);
 void Increase_Player_2(T_Score* score);
 void Reset_Ball(T_Ball* ball);
-void Keystroke(GLFWwindow* window, T_Racket* Left_Rack, T_Racket* Right_Rack,
-               float dy_change);
+void Reset_racket(T_Racket* racket);
+void Reset_Round(T_Ball* ball, T_Racket* Left_Rack, T_Racket* Right_Rack);
+void Keystroke(GLFWwindow* window, T_Ball* ball, T_Racket* Left_Rack,
+               T_Racket* Right_Rack, float dy_change);
