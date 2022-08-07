@@ -44,15 +44,16 @@ void Draw_Racket(T_Racket racket) {
 }
 
 void Draw_Score(T_Score score) {
-  float y = 18;
-
+  float y_pos = 18;
+  size = 1;
+  Set_Text_Color(0.7, 0.7, 0.7);
   for (int i = -8; i < 9; i += 4) {
     if (i < 0) {
-      Draw_Num((i < -5) ? score.Player_1 / 10 : score.Player_1 % 10, i, y);
+      Draw_Num((i < -5) ? score.Player_1 / 10 : score.Player_1 % 10, i, y_pos);
     } else if (i > 0) {
-      Draw_Num((i < 5) ? score.Player_2 / 10 : score.Player_2 % 10, i, y);
+      Draw_Num((i < 5) ? score.Player_2 / 10 : score.Player_2 % 10, i, y_pos);
     } else {
-      Draw_Colon(i, y);
+      Draw_Colon(i, y_pos);
     }
   }
 }

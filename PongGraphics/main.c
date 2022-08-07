@@ -38,7 +38,7 @@ void Render_Window() {
            Right_Rack = {0.92, 0, 0.03, 0.20, {1, 1, 1}};
   T_Score Score = {0, 0};
   float dy_change = 0.007;
-
+  int unlock_main_menu = 0, unlock_game = 0;
     while (!glfwWindowShouldClose(window)) {
       
         // Setup view
@@ -48,31 +48,42 @@ void Render_Window() {
         glViewport(0, 0, width, height);
         glClear(GL_COLOR_BUFFER_BIT);
         
-        //Draw_Nums_Test();
-        //Draw_P1W();
-        //Draw_P2W();
-        if (Score.Player_1 < final_score && Score.Player_2 < final_score) {
-          // Key Check
-          Keystroke(window,&Ball, &Left_Rack, &Right_Rack, dy_change);
+        if (glfwGetKey(window, GLFW_KEY_SPACE) == GLFW_PRESS)
+          unlock_main_menu = 1;
+        if (glfwGetKey(window, GLFW_KEY_ESCAPE) == GLFW_PRESS)
+          glfwSetWindowShouldClose(window, 1);
+        if (!unlock_main_menu)
+          Draw_Pong_Logo();
+        else {
+          if (Score.Player_1 < final_score && Score.Player_2 < final_score) {
+            // Key Check
+            if (glfwGetKey(window, GLFW_KEY_SPACE) == GLFW_RELEASE)
+              unlock_game = 1;
+            
+            if (unlock_game) {
+              Keystroke(window, &Ball, &Left_Rack, &Right_Rack, dy_change);
 
-          Ball_Collide(&Ball,&Left_Rack,&Right_Rack, &Score);
+              Ball_Collide(&Ball, &Left_Rack, &Right_Rack, &Score);
+            }
 
-          Draw_Score(Score);
-          Draw_Racket(Left_Rack);
-          Draw_Racket(Right_Rack);
-          Draw_Ball(Ball);
+            Draw_Score(Score);
+            Draw_Racket(Left_Rack);
+            Draw_Racket(Right_Rack);
+            Draw_Ball(Ball);
 
-        } else {
-          if (Score.Player_1 >= final_score) {
-            Draw_P1W();
-            if (glfwGetKey(window, GLFW_KEY_ESCAPE) == GLFW_PRESS)
-              glfwSetWindowShouldClose(window, 1);
           } else {
-            Draw_P2W();
-            if (glfwGetKey(window, GLFW_KEY_ESCAPE) == GLFW_PRESS)
-              glfwSetWindowShouldClose(window, 1);
+            if (Score.Player_1 >= final_score) {
+              Draw_P1W();
+            } else {
+              Draw_P2W();
+            }
           }
         }
+        //Draw_Char_Test();
+        //Draw_P1W();
+        //Draw_P2W();
+        //Draw_Pong_Logo();
+        
         // Swap buffers
         glfwSwapBuffers(window);
         glfwPollEvents();

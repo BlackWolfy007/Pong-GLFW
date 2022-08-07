@@ -4,18 +4,18 @@
 #include <math.h>
 #include <GLFW/glfw3.h>
 
-typedef struct Color {
+typedef struct Object_Color {
   float r;
   float g;
   float b;
-} T_Color;
+} O_Color;
 
 typedef struct Racket {
   float x;
   float y;
   float x_size;
   float y_size;
-  T_Color color;
+  O_Color color;
 } T_Racket;
 
 typedef struct Ball {
@@ -25,7 +25,7 @@ typedef struct Ball {
   float dy;
   float radius;
   float speedmult;
-  T_Color color;
+  O_Color color;
 } T_Ball;
 
 typedef struct Score {
