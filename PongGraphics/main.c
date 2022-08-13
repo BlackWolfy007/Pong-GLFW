@@ -2,11 +2,11 @@
 #include <stdlib.h>
 #include <math.h>
 
-#ifdef WINDOWS_PONG
+#ifdef WINDOWS_PONG_VISUAL_STUDIO
 #include <GLFW/glfw3.h>
-#endif  // WINDOWS_PONG
+#endif  // WINDOWS_PONG_VISUAL_STUDIO
 #ifdef MAC_OS_PONG
-#include <include/GLFW/glfw3.h>
+#include "include/GLFW/glfw3.h"
 #endif  // MAC_OS_PONG
 
 //#include "linmath.h"
