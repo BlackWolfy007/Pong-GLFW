@@ -1,15 +1,20 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <math.h>
+
+#ifdef WINDOWS_PONG
 #include <GLFW/glfw3.h>
-#include "linmath.h"
+#endif  // WINDOWS_PONG
+#ifdef MAC_OS_PONG
+#include <include/GLFW/glfw3.h>
+#endif  // MAC_OS_PONG
+
+//#include "linmath.h"
 #include "Draw_Text.h"
 #include "Game.h"
 #include "Game_Draw.h"
 
 //float ratio;
-
-
 
 void Init_Window();
 void Render_Window();

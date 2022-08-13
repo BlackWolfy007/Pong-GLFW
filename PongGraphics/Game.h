@@ -2,7 +2,14 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <math.h>
+
+#ifdef WINDOWS_PONG
 #include <GLFW/glfw3.h>
+#endif  // WINDOWS_PONG
+#ifdef MAC_OS_PONG
+#include <include/GLFW/glfw3.h>
+#endif  // MAC_OS_PONG
+
 
 typedef struct Object_Color {
   float r;
