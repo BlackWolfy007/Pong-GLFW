@@ -9,9 +9,6 @@
 #ifdef WINDOWS_PONG_GCC
 #include "include/GLFW/glfw3.h"
 #endif  // WINDOWS_PONG_GCC
-#ifdef MAC_OS_PONG
-#include "include/GLFW/glfw3.h"
-#endif  // MAC_OS_PONG
 
 
 typedef struct Object_Color {

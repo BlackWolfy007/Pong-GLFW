@@ -1,2 +1,2 @@
 # PongGraphics
-You can compile the game with ./Makefile/Mac_Os/Makefile on Mac OS and ./Makefile/Windows/Makefile.bat on Windows. To compile the game you should have gcc compiler.  
+You can compile the game with ./Makefile/Makefile.bat on Windows or with use Visual Studio 2022. To compile the game with Makefile.bat you should have gcc compiler.  
