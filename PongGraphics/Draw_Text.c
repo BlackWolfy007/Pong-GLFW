@@ -29,46 +29,6 @@ void Draw_Char_Test() {
     }
   }
 
-    /*Draw_Num(0,-15+x, 6+y);
-  Draw_Num(1,-11 + x, 6 + y);
-    Draw_Num(2, -7 + x, 6 + y);
-  Draw_Num(3, -3 + x, 6 + y);
-    Draw_Num(4, 1 + x, 6 + y);
-
-    Draw_Num(5, -15 + x, 0 + y);
-    Draw_Num(6, -11 + x, 0 + y);
-    Draw_Num(7, -7 + x, 0 + y);
-    Draw_Num(8, -3 + x, 0 + y);
-    Draw_Num(9, 1 + x, 0 + y);*/
-
-    /*Draw_A(-57, 6);
-    Draw_B(-53, 6);
-    Draw_C(-49, 6);
-    Draw_D(-45, 6);
-    Draw_E(-41, 6);
-    Draw_F(-37, 6);
-    Draw_G(-33, 6);
-    Draw_H(-28, 6);
-    Draw_I(-24, 6);
-    Draw_J(-20, 6);
-    Draw_K(-16, 6);
-    Draw_L(-12, 6);
-    Draw_M(-7, 6);
-
-    Draw_N(-57, 0);
-    Draw_O(-52, 0);
-    Draw_P(-47, 0);
-    Draw_Q(-43, 0);
-    Draw_R(-38, 0);
-    Draw_S(-34, 0);
-    Draw_T(-30, 0);
-    Draw_U(-26, 0);
-    Draw_V(-22, 0);
-    Draw_W(-17, 0);
-    Draw_X(-12, 0);
-    Draw_Y(-8, 0);
-    Draw_Z(-4, 0);*/
-
     Draw_Colon(-57, -6);
     Draw_Exclamination(-53, -6);
 }

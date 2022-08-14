@@ -57,6 +57,7 @@ void Render_Window() {
           unlock_main_menu = 1;
         if (glfwGetKey(window, GLFW_KEY_ESCAPE) == GLFW_PRESS)
           glfwSetWindowShouldClose(window, 1);
+
         if (!unlock_main_menu)
           Draw_Pong_Logo();
         else {

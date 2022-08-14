@@ -4,22 +4,53 @@ float ratio;
 
 const int final_score = 5;
 
-const float DEG2RAD = 3.14159 / 100;
+const float DEG2RAD = 3.14159 / 180;
 
 void Move_Racket(T_Racket* racket, float dy) { racket->y += dy; }
 
 
-
 int Left_Racket_Collide(T_Ball* ball, T_Racket* Left_Rack) {
-  return (((ball->x + ball->dx) < (Left_Rack->x + Left_Rack->x_size / 2)) &&
+  int collide = 0;
+  float sin_y = 0, cos_x = 0;
+  for (int i = 90; i < 270; i++) {
+    sin_y = sin(DEG2RAD * i);
+    cos_x = cos(DEG2RAD * i);
+    collide = (((ball->x - ball->radius*cos_x + ball->dx) <
+                (Left_Rack->x + Left_Rack->x_size / 2)) &&
+               ((ball->y - ball->radius * sin_y)  <
+              (Left_Rack->y + Left_Rack->y_size / 2) * ratio &&
+                (ball->y + ball->radius * sin_y)  >
+                    (Left_Rack->y - Left_Rack->y_size / 2) * ratio));
+  }
+
+  return collide;
+
+  /*return (((ball->x - ball->radius + ball->dx) < (Left_Rack->x + Left_Rack->x_size / 2)) &&
           (ball->y < (Left_Rack->y + Left_Rack->y_size / 2) * ratio &&
-           ball->y > (Left_Rack->y - Left_Rack->y_size / 2) * ratio));
+           ball->y > (Left_Rack->y - Left_Rack->y_size / 2) * ratio));*/
 }
 
 int Right_Racket_Collide(T_Ball* ball, T_Racket* Right_Rack) {
-  return (((ball->x + ball->dx) > (Right_Rack->x - Right_Rack->x_size / 2)) &&
+  int collide = 0;
+  float sin_y = 0, cos_x = 0;
+  for (int i = -90; i < 90; i++) {
+    sin_y = sin(DEG2RAD * i);
+    cos_x = cos(DEG2RAD * i);
+    collide =
+        (((ball->x + ball->radius*cos_x + ball->dx) >
+             (Right_Rack->x - Right_Rack->x_size / 2)) &&
+               ((ball->y - ball->radius * sin_y)  <
+                    (Right_Rack->y + Right_Rack->y_size / 2) * ratio &&
+          (ball->y + ball->radius * sin_y) >
+              (Right_Rack->y - Right_Rack->y_size / 2) * ratio));
+  }
+
+  return collide;
+
+  /*return (((ball->x + ball->radius + ball->dx) >
+           (Right_Rack->x - Right_Rack->x_size / 2)) &&
           (ball->y < (Right_Rack->y + Right_Rack->y_size / 2) * ratio &&
-           ball->y > (Right_Rack->y - Right_Rack->y_size / 2) * ratio));
+           ball->y > (Right_Rack->y - Right_Rack->y_size / 2) * ratio));*/
 }
 
 int Racket_Collide(T_Ball* ball, T_Racket* Left_Rack, T_Racket* Right_Rack) {
@@ -62,13 +93,13 @@ void Ball_Collide(T_Ball* ball, T_Racket* Left_Rack, T_Racket* Right_Rack, T_Sco
       Reset_Round(ball, Left_Rack, Right_Rack);
     } else ball->dx *= -1;
   } else {
-    ball->x += ball->dx;
+    ball->x += ball->dx * ball->speedmult;
   }
 
   if (Border_Y_Collide(ball)) {
     ball->dy *= -1;
   } else {
-    ball->y += ball->dy;
+    ball->y += ball->dy * ball->speedmult;
   }
 
   if (Racket_Collide (ball,Left_Rack,Right_Rack)) {
@@ -80,12 +111,14 @@ void Increase_Player_1(T_Score* score) { score->Player_1++; }
 
 void Increase_Player_2(T_Score* score) { score->Player_2++; }
 
+void Increase_Speedmult(T_Ball* ball) { ball->speedmult += 0.025; }
+
 void Reset_Ball(T_Ball* ball) {
   ball->x = 0;
   ball->y = 0;
   ball->dx = 0.01;
   ball->dy = 0.001;
-  ball->speedmult = 1;
+  ball->speedmult = 0.25;
 }
 
 void Reset_racket(T_Racket* racket) { racket->y = 0; }
@@ -101,18 +134,20 @@ void Keystroke(GLFWwindow* window,T_Ball* ball, T_Racket* Left_Rack, T_Racket* R
   if (glfwGetKey(window, GLFW_KEY_ESCAPE) == GLFW_PRESS)
     glfwSetWindowShouldClose(window, 1);
   if (glfwGetKey(window, GLFW_KEY_A) == GLFW_PRESS)
-    if (Left_Rack->y + dy_change < (1 - Left_Rack->y_size * ratio / 2) / ratio)
+    if (Left_Rack->y + dy_change <
+        (1 - Left_Rack->y_size * ratio / 2 - Left_Rack->x_size/2) / ratio)
       Move_Racket(Left_Rack, dy_change);
   if (glfwGetKey(window, GLFW_KEY_Z) == GLFW_PRESS)
-    if (Left_Rack->y - dy_change > (-1 + Left_Rack->y_size * ratio / 2) / ratio)
+    if (Left_Rack->y - dy_change >
+        (-1 + Left_Rack->y_size * ratio / 2 + Left_Rack->x_size/2) / ratio)
       Move_Racket(Left_Rack, -dy_change);
   if (glfwGetKey(window, GLFW_KEY_K) == GLFW_PRESS)
     if (Right_Rack->y + dy_change <
-        (1 - Right_Rack->y_size * ratio / 2) / ratio)
+        (1 - Right_Rack->y_size * ratio / 2 - Right_Rack->x_size / 2) / ratio)
       Move_Racket(Right_Rack, dy_change);
   if (glfwGetKey(window, GLFW_KEY_M) == GLFW_PRESS)
     if (Right_Rack->y - dy_change >
-        (-1 + Right_Rack->y_size * ratio / 2) / ratio)
+        (-1 + Right_Rack->y_size * ratio / 2 + Right_Rack->x_size / 2) / ratio)
       Move_Racket(Right_Rack, -dy_change);
   if (glfwGetKey(window, GLFW_KEY_R) == GLFW_PRESS) {
     Reset_Round(ball, Left_Rack, Right_Rack);

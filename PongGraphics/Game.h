@@ -60,8 +60,10 @@ void Ball_Collide(T_Ball* ball, T_Racket* Left_Rack, T_Racket* Right_Rack,
                   T_Score* Score);
 void Increase_Player_1(T_Score* score);
 void Increase_Player_2(T_Score* score);
+void Increase_Speedmult(T_Ball* ball);
 void Reset_Ball(T_Ball* ball);
 void Reset_racket(T_Racket* racket);
 void Reset_Round(T_Ball* ball, T_Racket* Left_Rack, T_Racket* Right_Rack);
 void Keystroke(GLFWwindow* window, T_Ball* ball, T_Racket* Left_Rack,
                T_Racket* Right_Rack, float dy_change);
+
