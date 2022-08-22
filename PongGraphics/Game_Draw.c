@@ -9,7 +9,7 @@ void Draw_Ball(T_Ball bll) {
   glBegin(GL_POLYGON);
   for (float i = 0; i < 360; i++) {
     glVertex2d((cos(DEG2RAD * i) * bll.radius + bll.x),
-               (sin(DEG2RAD * i) * bll.radius * ratio + bll.y));
+               (sin(DEG2RAD * i) * bll.radius /** ratio*/ + bll.y));
   }
   glEnd();
 }
@@ -18,16 +18,16 @@ void Draw_Racket(T_Racket racket) {
   glColor3f(racket.color.r, racket.color.g, racket.color.b);
   glBegin(GL_POLYGON);
   glVertex2d(racket.x - racket.x_size / 2,
-             (racket.y - racket.y_size / 2) * ratio);
+             (racket.y - racket.y_size / 2) /** ratio*/);
   glVertex2d(racket.x + racket.x_size / 2,
-             (racket.y - racket.y_size / 2) * ratio);
+             (racket.y - racket.y_size / 2) /** ratio*/);
   glVertex2d(racket.x + racket.x_size / 2,
-             (racket.y + racket.y_size / 2) * ratio );
+             (racket.y + racket.y_size / 2) /** ratio*/ );
   glVertex2d(racket.x - racket.x_size / 2,
-             (racket.y + racket.y_size / 2) * ratio );
+             (racket.y + racket.y_size / 2) /** ratio*/ );
   glEnd();
   glBegin(GL_POLYGON);
-  for (float i = 0; i < 360; i++) {
+  /*for (float i = 0; i < 360; i++) {
     glVertex2d((cos(DEG2RAD * i) * racket.x_size / 2 + racket.x),
         (sin(DEG2RAD * i) * racket.x_size / 2 + racket.y_size / 2 + racket.y) *
             ratio);
@@ -40,7 +40,7 @@ void Draw_Racket(T_Racket racket) {
         (sin(DEG2RAD * i) * racket.x_size / 2 - racket.y_size / 2 + racket.y) *
             ratio);
   }
-  glEnd();
+  glEnd();*/
 }
 
 void Draw_Score(T_Score score) {

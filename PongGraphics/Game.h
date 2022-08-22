@@ -46,6 +46,8 @@ extern const int final_score;
 
 extern const float DEG2RAD;
 
+extern const float default_speed;
+
 void Move_Racket(T_Racket* racket, float dy);
 int Racket_Collide(T_Ball* ball, T_Racket* Left_Rack, T_Racket* Right_Rack);
 int Border_X_Left_Collide(T_Ball* ball);
