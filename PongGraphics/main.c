@@ -10,9 +10,9 @@
 #endif  // WINDOWS_PONG_GCC
 
 //#include "linmath.h"
-#include "Draw_Text.h"
-#include "Game.h"
-#include "Game_Draw.h"
+#include "include/Draw_Text.h"
+#include "include/Game.h"
+#include "include/Game_Draw.h"
 
 //float ratio;
 
