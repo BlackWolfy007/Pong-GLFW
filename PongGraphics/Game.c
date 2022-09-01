@@ -1,4 +1,12 @@
+#ifdef WINDOWS_PONG_VISUAL_STUDIO
+#include <Game.h>
+#endif  // WINDOWS_PONG_VISUAL_STUDIO
+#ifdef WINDOWS_PONG_GCC
 #include "include/Game.h"
+#endif  // WINDOWS_PONG_GCC
+
+
+
 
 float ratio;
 

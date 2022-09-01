@@ -1,4 +1,9 @@
+#ifdef WINDOWS_PONG_VISUAL_STUDIO
+#include <Draw_Text.h>
+#endif  // WINDOWS_PONG_VISUAL_STUDIO
+#ifdef WINDOWS_PONG_GCC
 #include "include/Draw_Text.h"
+#endif  // WINDOWS_PONG_GCC
 
 float ratio;
 

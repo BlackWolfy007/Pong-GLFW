@@ -4,15 +4,19 @@
 
 #ifdef WINDOWS_PONG_VISUAL_STUDIO
 #include <GLFW/glfw3.h>
+#include <Draw_Text.h>
+#include <Game.h>
+#include <Game_Draw.h>
 #endif  // WINDOWS_PONG_VISUAL_STUDIO
 #ifdef WINDOWS_PONG_GCC
 #include "include/GLFW/glfw3.h"
-#endif  // WINDOWS_PONG_GCC
-
-//#include "linmath.h"
 #include "include/Draw_Text.h"
 #include "include/Game.h"
 #include "include/Game_Draw.h"
+#endif  // WINDOWS_PONG_GCC
+
+//#include "linmath.h"
+
 
 //float ratio;
 
