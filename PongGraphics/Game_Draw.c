@@ -7,7 +7,7 @@
 
 float ratio;
 
-const float DEG2RAD;
+const float DEG2RAD = 3.14159 / 180;
 
 void Draw_Ball(T_Ball bll) {
   glColor3f(bll.color.r, bll.color.g, bll.color.b);
