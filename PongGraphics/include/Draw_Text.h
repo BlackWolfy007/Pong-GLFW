@@ -4,7 +4,8 @@
 #include <GLFW/glfw3.h>
 #endif  // WINDOWS_PONG_VISUAL_STUDIO
 #ifdef WINDOWS_PONG_GCC
-#include "GLFW/glfw3.h"
+#define GLFW_INCLUDE_NONE
+#include "include/GLFW/glfw3.h"
 #endif  // WINDOWS_PONG_GCC
 
 typedef struct Text_Color {
@@ -15,6 +16,7 @@ typedef struct Text_Color {
 
 static float size = 1;
 static float grid_coeff = 0.04444444444;
+
 extern float ratio;
 extern T_Color text_color;
 

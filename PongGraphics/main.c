@@ -9,6 +9,7 @@
 #include <Game_Draw.h>
 #endif  // WINDOWS_PONG_VISUAL_STUDIO
 #ifdef WINDOWS_PONG_GCC
+#define GLFW_INCLUDE_NONE
 #include "include/GLFW/glfw3.h"
 #include "include/Draw_Text.h"
 #include "include/Game.h"
@@ -62,39 +63,39 @@ void Render_Window() {
         if (glfwGetKey(window, GLFW_KEY_ESCAPE) == GLFW_PRESS)
           glfwSetWindowShouldClose(window, 1);
 
-        if (!unlock_main_menu)
-          Draw_Pong_Logo();
-        else {
-          if (Score.Player_1 < final_score && Score.Player_2 < final_score) {
-            // Key Check
-            if (glfwGetKey(window, GLFW_KEY_SPACE) == GLFW_RELEASE)
-              unlock_game = 1;
-            
-            if (unlock_game) {
-              Keystroke(window, &Ball, &Left_Rack, &Right_Rack, dy_change);
+        //if (!unlock_main_menu)
+        //  Draw_Pong_Logo();
+        //else {
+        //  if (Score.Player_1 < final_score && Score.Player_2 < final_score) {
+        //    // Key Check
+        //    if (glfwGetKey(window, GLFW_KEY_SPACE) == GLFW_RELEASE)
+        //      unlock_game = 1;
+        //    
+        //    if (unlock_game) {
+        //      Keystroke(window, &Ball, &Left_Rack, &Right_Rack, dy_change);
 
-              Ball_Collide(&Ball, &Left_Rack, &Right_Rack, &Score);
-              Increase_Speedmult(&Ball);
-            }
+        //      Ball_Collide(&Ball, &Left_Rack, &Right_Rack, &Score);
+        //      Increase_Speedmult(&Ball);
+        //    }
 
-            Draw_Score(Score);
-            Draw_Racket(Left_Rack);
-            Draw_Racket(Right_Rack);
-            Draw_Ball(Ball);
-            if ((count % 100) == 0)
-              printf("speedmult: %f, current_ball->dx: %f, current_ball->dy: %f\n",
-                     Ball.speedmult, Ball.dx*Ball.speedmult, Ball.dy*Ball.speedmult);
-            count++;
-            if (count > 9999) count = 0;
-          } else {
-            if (Score.Player_1 >= final_score) {
-              Draw_P1W();
-            } else {
-              Draw_P2W();
-            }
-          }
-        }
-        //Draw_Char_Test();
+        //    Draw_Score(Score);
+        //    Draw_Racket(Left_Rack);
+        //    Draw_Racket(Right_Rack);
+        //    Draw_Ball(Ball);
+        //    if ((count % 100) == 0)
+        //      printf("speedmult: %f, current_ball->dx: %f, current_ball->dy: %f\n",
+        //             Ball.speedmult, Ball.dx*Ball.speedmult, Ball.dy*Ball.speedmult);
+        //    count++;
+        //    if (count > 9999) count = 0;
+        //  } else {
+        //    if (Score.Player_1 >= final_score) {
+        //      Draw_P1W();
+        //    } else {
+        //      Draw_P2W();
+        //    }
+        //  }
+        //}
+        Draw_Char_Test();
         //Draw_P1W();
         //Draw_P2W();
         //Draw_Pong_Logo();

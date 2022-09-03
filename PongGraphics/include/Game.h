@@ -7,7 +7,8 @@
 #include <GLFW/glfw3.h>
 #endif  // WINDOWS_PONG_VISUAL_STUDIO
 #ifdef WINDOWS_PONG_GCC
-#include "GLFW/glfw3.h"
+#define GLFW_INCLUDE_NONE
+#include "include/GLFW/glfw3.h"
 #endif  // WINDOWS_PONG_GCC
 
 
