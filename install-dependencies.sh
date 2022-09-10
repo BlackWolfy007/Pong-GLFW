@@ -1,2 +1,3 @@
 #!/bin/bash
-sudo apt install libglfw3 libglfw3-dev cmake cmake-gui
+apt update
+apt install libglfw3 libglfw3-dev cmake cmake-gui -y
