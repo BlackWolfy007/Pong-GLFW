@@ -4,7 +4,9 @@
 #ifdef WINDOWS_PONG_GCC
 #include "include/Game.h"
 #endif  // WINDOWS_PONG_GCC
-
+#ifdef _CMAKE_
+#include "Game.h"
+#endif  // _CMAKE_
 
 
 

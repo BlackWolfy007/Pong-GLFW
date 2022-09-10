@@ -4,6 +4,10 @@
 #ifdef WINDOWS_PONG_GCC
 #include "include/Draw_Text.h"
 #endif  // WINDOWS_PONG_GCC
+#ifdef _CMAKE_
+#include "Draw_Text.h"
+#endif  // _CMAKE_
+
 
 float ratio;
 

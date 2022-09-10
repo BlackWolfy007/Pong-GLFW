@@ -15,7 +15,12 @@
 #include "include/Game.h"
 #include "include/Game_Draw.h"
 #endif  // WINDOWS_PONG_GCC
-
+#ifdef _CMAKE_
+#include "GLFW/glfw3.h"
+#include "Draw_Text.h"
+#include "Game.h"
+#include "Game_Draw.h"
+#endif  // _CMAKE_
 //#include "linmath.h"
 
 

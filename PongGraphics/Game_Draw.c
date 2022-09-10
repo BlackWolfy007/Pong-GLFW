@@ -4,6 +4,10 @@
 #ifdef WINDOWS_PONG_GCC
 #include "include/Game_Draw.h"
 #endif  // WINDOWS_PONG_GCC
+#ifdef _CMAKE_
+#include "Game_Draw.h"
+#endif  // _CMAKE
+
 
 float ratio;
 
