@@ -552,32 +552,50 @@ void Draw_Help() {
   Draw_Letter('W', 10 + x_pos, 0 + y_pos);
   Draw_Letter('N', 15 + x_pos, 0 + y_pos);
   size = 1;
-  x_pos = -43;
+  x_pos = -28;
   y_pos = -10;
   Set_Text_Color(0.2, 0.2, 0.2);
-  Draw_Letter('E', 0 + x_pos, 0 + y_pos);
-  Draw_Letter('S', 4 + x_pos, 0 + y_pos);
-  Draw_Letter('C', 8 + x_pos, 0 + y_pos);
+  Draw_Letter('P', 0 + x_pos, 0 + y_pos);
+  Draw_Letter('R', 4 + x_pos, 0 + y_pos);
+  Draw_Letter('E', 8 + x_pos, 0 + y_pos);
   Draw_Letter('S', 12 + x_pos, 0 + y_pos);
   Draw_Letter('S', 16 + x_pos, 0 + y_pos);
 
-  Draw_Letter('S', 22 + x_pos, 0 + y_pos);
-  Draw_Letter('P', 26 + x_pos, 0 + y_pos);
-  Draw_Letter('A', 30 + x_pos, 0 + y_pos);
-  Draw_Letter('C', 34 + x_pos, 0 + y_pos);
-  Draw_Letter('E', 38 + x_pos, 0 + y_pos);
+  Draw_Letter('E', 22 + x_pos, 0 + y_pos);
+  Draw_Letter('S', 26 + x_pos, 0 + y_pos);
+  Draw_Letter('C', 30 + x_pos, 0 + y_pos);
 
-  Draw_Letter('T', 44 + x_pos, 0 + y_pos);
-  Draw_Letter('O', 48 + x_pos, 0 + y_pos);
+  Draw_Letter('T', 36 + x_pos, 0 + y_pos);
+  Draw_Letter('O', 40 + x_pos, 0 + y_pos);
 
-  Draw_Letter('C', 55 + x_pos, 0 + y_pos);
-  Draw_Letter('O', 59 + x_pos, 0 + y_pos);
-  Draw_Letter('N', 64 + x_pos, 0 + y_pos);
-  Draw_Letter('T', 69 + x_pos, 0 + y_pos);
-  Draw_Letter('I', 73 + x_pos, 0 + y_pos);
-  Draw_Letter('N', 77 + x_pos, 0 + y_pos);
-  Draw_Letter('U', 82 + x_pos, 0 + y_pos);
-  Draw_Letter('E', 86 + x_pos, 0 + y_pos);
+  Draw_Letter('E', 47 + x_pos, 0 + y_pos);
+  Draw_Letter('X', 51 + x_pos, 0 + y_pos);
+  Draw_Letter('I', 55 + x_pos, 0 + y_pos);
+  Draw_Letter('T', 59 + x_pos, 0 + y_pos);
+  size = 1;
+  x_pos = -33;
+  y_pos = -17;
+  Set_Text_Color(0.2, 0.2, 0.2);
+  Draw_Letter('P', 0 + x_pos, 0 + y_pos);
+  Draw_Letter('R', 4 + x_pos, 0 + y_pos);
+  Draw_Letter('E', 8 + x_pos, 0 + y_pos);
+  Draw_Letter('S', 12 + x_pos, 0 + y_pos);
+  Draw_Letter('S', 16 + x_pos, 0 + y_pos);
+
+  Draw_Letter('H', 22 + x_pos, 0 + y_pos);
+
+  Draw_Letter('T', 28 + x_pos, 0 + y_pos);
+  Draw_Letter('O', 32 + x_pos, 0 + y_pos);
+
+  Draw_Letter('H', 39 + x_pos, 0 + y_pos);
+  Draw_Letter('I', 43 + x_pos, 0 + y_pos);
+  Draw_Letter('D', 47 + x_pos, 0 + y_pos);
+  Draw_Letter('E', 51 + x_pos, 0 + y_pos);
+
+  Draw_Letter('H', 57 + x_pos, 0 + y_pos);
+  Draw_Letter('E', 61 + x_pos, 0 + y_pos);
+  Draw_Letter('L', 65 + x_pos, 0 + y_pos);
+  Draw_Letter('P', 69 + x_pos, 0 + y_pos);
 }
 
 void Draw_Pong_Logo() {
