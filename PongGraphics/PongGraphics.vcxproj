@@ -147,15 +147,7 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
-    <ClCompile Include="Draw_Text.c" />
-    <ClCompile Include="Game.c" />
-    <ClCompile Include="Game_Draw.c" />
     <ClCompile Include="main.c" />
-  </ItemGroup>
-  <ItemGroup>
-    <ClInclude Include="include\Draw_Text.h" />
-    <ClInclude Include="include\Game.h" />
-    <ClInclude Include="include\Game_Draw.h" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">
