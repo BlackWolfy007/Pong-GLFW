@@ -1,22 +1,49 @@
+// ===================================
+// 
+// GLFW
+// 
+// ===================================
+
 #include "include/GLFW/glfw3.h"
+
+// ===================================
+//
+// Standard libraries
+//
+// ===================================
 
 #include <math.h>
 #include <stdio.h>
 #include <stdlib.h>
-// Structures declaration
+
 // ===================================
+//
+// Structures declaration
+// 
+// ===================================
+
+// -----------------------------------
+// Color
+// -----------------------------------
+
+// Responsible for the text color
 typedef struct Text_Color {
   float r;
   float g;
   float b;
 } T_Color;
-
+// Responsible for the object color
 typedef struct Object_Color {
   float r;
   float g;
   float b;
 } O_Color;
 
+// -----------------------------------
+// Object parameters
+// -----------------------------------
+
+// Responsible for the racket parameters
 typedef struct Racket {
   float x;
   float y;
@@ -24,7 +51,7 @@ typedef struct Racket {
   float y_size;
   O_Color color;
 } T_Racket;
-
+// Responsible for the ball parameters
 typedef struct Ball {
   float x;
   float y;
@@ -34,93 +61,176 @@ typedef struct Ball {
   float speedmult;
   O_Color color;
 } T_Ball;
-
+// Responsible for the score table
 typedef struct Score {
   int Player_1;
   int Player_2;
 } T_Score;
+
 // ===================================
+// 
 // Global variables
+// 
 // ===================================
 
+// -----------------------------------
+// Windows parameters
+// -----------------------------------
+
+// Responsible for window parameters
 static GLFWwindow *window;
-
-static float size = 1;
-
-static float grid_coeff = 0.04444444444;
-
+// Responsible for the aspect ratio of the window
 float ratio;
 
-T_Color text_color = {1, 1, 1};
+// -----------------------------------
+// Text parameters
+// -----------------------------------
 
+// Responsible for the size of the text
+static float size = 1;
+// Responsible for the grid size for the text
+static float grid_coeff = 0.04444444444;
+// Responsible for the text color
+T_Color text_color = {1, 1, 1};
+// Responsible for the number of points needed to win
 const int final_score = 5;
 
-const float DEG2RAD = 3.14159 / 180;
+// -----------------------------------
+// Ball parameters
+// -----------------------------------
 
+// Used when converting degrees to radians
+const float DEG2RAD = 3.14159 / 180;
+// Responsible for the default speed of the ball
 const float default_speed = 0.1;
 
 // ===================================
+// 
+// Text drawing functions
+// 
+// ===================================
 
+// -----------------------------------
+// Basic functions
+// -----------------------------------
+
+// Sets the color of the text in rgb format (input should be in range [0;1])
 void Set_Text_Color(float r, float g, float b);
 
 // Draws a pixel polygon
 void Draw_Pixel(float x, float y);
 
-// Draws inputted num (0<=num<=9)
+// -----------------------------------
+// Character decision functions
+// -----------------------------------
+
+// Draws inputted num (num belong to [0;9])
 void Draw_Num(int num, float x, float y);
 
 // Draws inputted letter ('A'-'Z','a'-'z')
 void Draw_Letter(char character, float x, float y);
 
-// Nums
+// -----------------------------------
+// Digit rendering functions
+// -----------------------------------
 
+// Draws character '0'
 void Draw_0(float x, float y);
+// Draws character '1'
 void Draw_1(float x, float y);
+// Draws character '2'
 void Draw_2(float x, float y);
+// Draws character '3'
 void Draw_3(float x, float y);
+// Draws character '4'
 void Draw_4(float x, float y);
+// Draws character '5'
 void Draw_5(float x, float y);
+// Draws character '6'
 void Draw_6(float x, float y);
+// Draws character '7'
 void Draw_7(float x, float y);
+// Draws character '8'
 void Draw_8(float x, float y);
+// Draws character '9'
 void Draw_9(float x, float y);
 
-// Letters
+// -----------------------------------
+// Letter rendering functions
+// -----------------------------------
 
+// Draws character 'A' or 'a'
 void Draw_A(float x, float y);
+// Draws character 'B' or 'b'
 void Draw_B(float x, float y);
+// Draws character 'C' or 'c'
 void Draw_C(float x, float y);
+// Draws character 'D' or 'd'
 void Draw_D(float x, float y);
+// Draws character 'E' or 'e'
 void Draw_E(float x, float y);
+// Draws character 'F' or 'f'
 void Draw_F(float x, float y);
+// Draws character 'G' or 'g'
 void Draw_G(float x, float y);
+// Draws character 'H' or 'h'
 void Draw_H(float x, float y);
+// Draws character 'I' or 'i'
 void Draw_I(float x, float y);
+// Draws character 'J' or 'j'
 void Draw_J(float x, float y);
+// Draws character 'K' or 'k'
 void Draw_K(float x, float y);
+// Draws character 'L' or 'l'
 void Draw_L(float x, float y);
+// Draws character 'M' or 'm'
 void Draw_M(float x, float y);
+// Draws character 'N' or 'n'
 void Draw_N(float x, float y);
+// Draws character 'O' or 'o'
 void Draw_O(float x, float y);
+// Draws character 'P' or 'p'
 void Draw_P(float x, float y);
+// Draws character 'Q' or 'q'
 void Draw_Q(float x, float y);
+// Draws character 'R' or 'r'
 void Draw_R(float x, float y);
+// Draws character 'S' or 's'
 void Draw_S(float x, float y);
+// Draws character 'T' or 't'
 void Draw_T(float x, float y);
+// Draws character 'U' or 'u'
 void Draw_U(float x, float y);
+// Draws character 'V' or 'v'
 void Draw_V(float x, float y);
+// Draws character 'W' or 'w'
 void Draw_W(float x, float y);
+// Draws character 'X' or 'x'
 void Draw_X(float x, float y);
+// Draws character 'Y' or 'y'
 void Draw_Y(float x, float y);
+// Draws character 'Z' or 'z'
 void Draw_Z(float x, float y);
 
-// Chars
+// -----------------------------------
+// Characters rendering functions
+// -----------------------------------
 
+// Draws character ':'
 void Draw_Colon(float x, float y);
+// Draws character '!'
 void Draw_Exclamination(float x, float y);
+
+// -----------------------------------
+// Rendering test
+// -----------------------------------
 
 // Test function to check if letters are shows on screen correctly
 void Draw_Char_Test();
+
+// -----------------------------------
+// Text draw functions
+// -----------------------------------
 
 // Draws "P1 WON!"
 void Draw_P1W();
@@ -128,10 +238,18 @@ void Draw_P1W();
 void Draw_P2W();
 // Draws "Pong"
 void Draw_Pong_Logo();
+// Draws help for controls
+void Draw_Help();
 
+// ===================================
+//
+// Game mechanics functions
+//
+// ===================================
 
-
+// Changes the position of the racket with an offset along the Y coordinate by the received value
 void Move_Racket(T_Racket *racket, float dy);
+
 int Racket_Collide(T_Ball *ball, T_Racket *Left_Rack, T_Racket *Right_Rack);
 int Border_X_Left_Collide(T_Ball *ball);
 int Border_X_Right_Collide(T_Ball *ball);
@@ -142,28 +260,50 @@ int Border_X_Collide(T_Ball *ball);
 int Border_Y_Collide(T_Ball *ball);
 void Ball_Collide(T_Ball *ball, T_Racket *Left_Rack, T_Racket *Right_Rack,
                   T_Score *Score);
+// Increases the score for Player 1 by 1
 void Increase_Player_1(T_Score *score);
+// Increases the score for Player 2 by 1
 void Increase_Player_2(T_Score *score);
+// Increases the speed multiplier for ball
 void Increase_Speedmult(T_Ball *ball);
+// Resets the ball parameters
 void Reset_Ball(T_Ball *ball);
+// Resets the racket parameters
 void Reset_racket(T_Racket *racket);
+// Resets the round
 void Reset_Round(T_Ball *ball, T_Racket *Left_Rack, T_Racket *Right_Rack);
+// Responsible for handling keys
 void Keystroke(GLFWwindow *window, T_Ball *ball, T_Racket *Left_Rack,
                T_Racket *Right_Rack, float dy_change);
 
-extern float ratio;
+// ===================================
+//
+// Object drawing functions
+//
+// ===================================
 
 void Draw_Ball(T_Ball bll);
 void Draw_Racket(T_Racket racket);
 void Draw_Score(T_Score score);
 
-// float ratio;
+// ===================================
+//
+// Window operation functions
+//
+// ===================================
 
+// Responsible for the window initialization 
 void Init_Window();
+// Responsible for the window render process
 void Render_Window();
+// Responsible for the window destruction
 void Destroy_Window();
 
-
+// ===================================
+//
+// Program initialization function
+//
+// ===================================
 
 int main(void) {
   Init_Window();
@@ -185,7 +325,7 @@ void Render_Window() {
            Right_Rack = {0.92, 0, 0.03, 0.20, {1, 1, 1}};
   T_Score Score = {0, 0};
   float dy_change = 0.007;
-  int unlock_main_menu = 0, unlock_game = 0;
+  int unlock_main_menu = 0, unlock_game = 0, hide_help = 0;
   int count = 0;
   while (!glfwWindowShouldClose(window)) {
     // Setup view
@@ -199,6 +339,8 @@ void Render_Window() {
       unlock_main_menu = 1;
     if (glfwGetKey(window, GLFW_KEY_ESCAPE) == GLFW_PRESS)
       glfwSetWindowShouldClose(window, 1);
+    if (glfwGetKey(window, GLFW_KEY_H) == GLFW_PRESS)
+      hide_help = 1;
 
     if (!unlock_main_menu)
       Draw_Pong_Logo();
@@ -214,7 +356,7 @@ void Render_Window() {
           Ball_Collide(&Ball, &Left_Rack, &Right_Rack, &Score);
           Increase_Speedmult(&Ball);
         }
-
+        if (!hide_help) Draw_Help();
         Draw_Score(Score);
         Draw_Racket(Left_Rack);
         Draw_Racket(Right_Rack);
@@ -371,6 +513,71 @@ void Draw_P2W() {
   Draw_Letter('X', 51 + x_pos, 0 + y_pos);
   Draw_Letter('I', 55 + x_pos, 0 + y_pos);
   Draw_Letter('T', 59 + x_pos, 0 + y_pos);
+}
+
+void Draw_Help() {
+  float x_pos = 0, y_pos = 0;
+  size = 1;
+  Set_Text_Color(0.5, 0.5, 0.5);
+  Draw_Letter('A', -55 + x_pos, 18 + y_pos);
+  Draw_Letter('Z', -55 + x_pos, -18 + y_pos);
+  Draw_Letter('K', 55 + x_pos, 18 + y_pos);
+  Draw_Letter('M', 55 + x_pos, -18 + y_pos);
+  x_pos = -112;
+  y_pos = 27;
+  size = 0.5;
+  Set_Text_Color(0.25, 0.25, 0.25);
+  Draw_Letter('U', 0 + x_pos, 0 + y_pos);
+  Draw_Letter('P', 4 + x_pos, 0 + y_pos);
+  x_pos = 108;
+  y_pos = 27;
+  size = 0.5;
+  Set_Text_Color(0.25, 0.25, 0.25);
+  Draw_Letter('U', 0 + x_pos, 0 + y_pos);
+  Draw_Letter('P', 4 + x_pos, 0 + y_pos);
+  x_pos = -118;
+  y_pos = -27;
+  size = 0.5;
+  Set_Text_Color(0.25, 0.25, 0.25);
+  Draw_Letter('D', 0 + x_pos, 0 + y_pos);
+  Draw_Letter('O', 4 + x_pos, 0 + y_pos);
+  Draw_Letter('W', 10 + x_pos, 0 + y_pos);
+  Draw_Letter('N', 15 + x_pos, 0 + y_pos);
+  x_pos = 102;
+  y_pos = -27;
+  size = 0.5;
+  Set_Text_Color(0.25, 0.25, 0.25);
+  Draw_Letter('D', 0 + x_pos, 0 + y_pos);
+  Draw_Letter('O', 4 + x_pos, 0 + y_pos);
+  Draw_Letter('W', 10 + x_pos, 0 + y_pos);
+  Draw_Letter('N', 15 + x_pos, 0 + y_pos);
+  size = 1;
+  x_pos = -43;
+  y_pos = -10;
+  Set_Text_Color(0.2, 0.2, 0.2);
+  Draw_Letter('E', 0 + x_pos, 0 + y_pos);
+  Draw_Letter('S', 4 + x_pos, 0 + y_pos);
+  Draw_Letter('C', 8 + x_pos, 0 + y_pos);
+  Draw_Letter('S', 12 + x_pos, 0 + y_pos);
+  Draw_Letter('S', 16 + x_pos, 0 + y_pos);
+
+  Draw_Letter('S', 22 + x_pos, 0 + y_pos);
+  Draw_Letter('P', 26 + x_pos, 0 + y_pos);
+  Draw_Letter('A', 30 + x_pos, 0 + y_pos);
+  Draw_Letter('C', 34 + x_pos, 0 + y_pos);
+  Draw_Letter('E', 38 + x_pos, 0 + y_pos);
+
+  Draw_Letter('T', 44 + x_pos, 0 + y_pos);
+  Draw_Letter('O', 48 + x_pos, 0 + y_pos);
+
+  Draw_Letter('C', 55 + x_pos, 0 + y_pos);
+  Draw_Letter('O', 59 + x_pos, 0 + y_pos);
+  Draw_Letter('N', 64 + x_pos, 0 + y_pos);
+  Draw_Letter('T', 69 + x_pos, 0 + y_pos);
+  Draw_Letter('I', 73 + x_pos, 0 + y_pos);
+  Draw_Letter('N', 77 + x_pos, 0 + y_pos);
+  Draw_Letter('U', 82 + x_pos, 0 + y_pos);
+  Draw_Letter('E', 86 + x_pos, 0 + y_pos);
 }
 
 void Draw_Pong_Logo() {
