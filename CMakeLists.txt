@@ -10,7 +10,7 @@ add_definitions(-D_CMAKE_)
 
 set(SOURCE_DIR PongGraphics/)
 
-set(SOURCE_EXE 	${SOURCE_DIR}main.c ${SOURCE_DIR}Game.c ${SOURCE_DIR}Game_Draw.c ${SOURCE_DIR}Draw_Text.c)		# Установка переменной со списком исходников
+set(SOURCE_EXE 	${SOURCE_DIR}main.c)		# Установка переменной со списком исходников
 
 #include_directories(glfw)			# Расположение заголовочных файлов
 
