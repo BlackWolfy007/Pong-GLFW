@@ -7,21 +7,29 @@
 static GLFWwindow *window;
 float ratio;
 
+// Parameters for rhombus resize
+
 int switcher = 0;
 float resize = 0;
+
+// Parameters for FPS
 
 double previousTime = 0;
 double currentTime = 0;
 double previousSecond = 0;
 int frameCount = 0;
 
+// Current window framerate
 int framerate = 120;
 
 void Init_Window();
+// Function to render window
 void Render_FPS();
+// Function to render one frame of window
 void Render_Window();
 void Destroy_Window();
 
+// Rhombus draw function
 void Rhombus();
 
 int main(void) {
@@ -41,31 +49,26 @@ void Destroy_Window() {
 void Render_FPS() {
   previousSecond = previousTime = glfwGetTime();
     while (!glfwWindowShouldClose(window)) {
-    currentTime = glfwGetTime();
+        currentTime = glfwGetTime();
 
-      if (currentTime - previousTime >= 1.0 / framerate) {
-        previousTime = currentTime;
-        Render_Window();
+        if (currentTime - previousTime >= 1.0 / framerate) {
+            previousTime = currentTime;
+            Render_Window();
 
-        frameCount++;
-      }
+            frameCount++;
+        }
 
-    if (currentTime - previousSecond >= 1.0) {
+        if (currentTime - previousSecond >= 1.0) {
         
-        printf("\nFPS: %d\n", frameCount);
-        frameCount = 0;
-        previousSecond = currentTime;
-    }
-      
-      
+            printf("\nFPS: %d\n", frameCount);
+            frameCount = 0;
+            previousSecond = currentTime;
+        }
       
     }
 }
 
 void Render_Window() {
-  
-
-  
     // Setup view
     int width, height;
     glfwGetFramebufferSize(window, &width, &height);
@@ -74,7 +77,9 @@ void Render_Window() {
     glClear(GL_COLOR_BUFFER_BIT);
 
     if (glfwGetKey(window, GLFW_KEY_ESCAPE) == GLFW_PRESS)
-      glfwSetWindowShouldClose(window, 1);
+    glfwSetWindowShouldClose(window, 1);
+
+    // Setting up the framerate
     if (glfwGetKey(window, GLFW_KEY_Z) == GLFW_PRESS) framerate = 30;
     if (glfwGetKey(window, GLFW_KEY_X) == GLFW_PRESS) framerate = 60;
     if (glfwGetKey(window, GLFW_KEY_C) == GLFW_PRESS) framerate = 90;
@@ -83,7 +88,7 @@ void Render_Window() {
     if (glfwGetKey(window, GLFW_KEY_N) == GLFW_PRESS) framerate = 180;
 
     Rhombus();
-    
+
     // Swap buffers
     glfwSwapBuffers(window);
     glfwPollEvents();
