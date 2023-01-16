@@ -400,7 +400,7 @@ void Init_Window() {
   }
   glfwMakeContextCurrent(window);
 
-  glfwSwapInterval(1);
+  glfwSwapInterval(0);
 }
 
 
