@@ -75,6 +75,12 @@ void Render_Window() {
 
     if (glfwGetKey(window, GLFW_KEY_ESCAPE) == GLFW_PRESS)
       glfwSetWindowShouldClose(window, 1);
+    if (glfwGetKey(window, GLFW_KEY_Z) == GLFW_PRESS) framerate = 30;
+    if (glfwGetKey(window, GLFW_KEY_X) == GLFW_PRESS) framerate = 60;
+    if (glfwGetKey(window, GLFW_KEY_C) == GLFW_PRESS) framerate = 90;
+    if (glfwGetKey(window, GLFW_KEY_V) == GLFW_PRESS) framerate = 120;
+    if (glfwGetKey(window, GLFW_KEY_B) == GLFW_PRESS) framerate = 150;
+    if (glfwGetKey(window, GLFW_KEY_N) == GLFW_PRESS) framerate = 180;
 
     Rhombus();
     
