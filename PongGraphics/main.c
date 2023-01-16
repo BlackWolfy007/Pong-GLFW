@@ -110,7 +110,7 @@ const int final_score = 5;
 // Used when converting degrees to radians
 const float DEG2RAD = 3.14159 / 180;
 // Responsible for the default speed of the ball
-const float default_speed = 0.1;
+const float default_speed = 0.01;
 
 // ===================================
 // 
@@ -424,7 +424,7 @@ void Init_Window() {
   }
   glfwMakeContextCurrent(window);
 
-  glfwSwapInterval(0);
+  glfwSwapInterval(1);
 }
 
 
