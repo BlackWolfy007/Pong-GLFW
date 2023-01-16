@@ -9,7 +9,7 @@ float ratio;
 
 double previousTime = 0;
 double currentTime = 0;
-double lastSecond = 0;
+double previousSecond = 0;
 int frameCount = 0;
 
 int framerate = 120;
@@ -35,7 +35,7 @@ void Destroy_Window() {
 }
 
 void Render_FPS() {
-  lastSecond = previousTime = glfwGetTime();
+  previousSecond = previousTime = glfwGetTime();
     while (!glfwWindowShouldClose(window)) {
     currentTime = glfwGetTime();
 
@@ -46,11 +46,11 @@ void Render_FPS() {
         frameCount++;
       }
 
-    if (currentTime - lastSecond >= 1.0) {
+    if (currentTime - previousSecond >= 1.0) {
         
         printf("\nFPS: %d\n", frameCount);
         frameCount = 0;
-        lastSecond = currentTime;
+        previousSecond = currentTime;
     }
       
       
