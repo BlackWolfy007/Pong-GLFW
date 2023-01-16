@@ -9,16 +9,20 @@ float ratio;
 
 double previousTime = 0;
 double currentTime = 0;
+double lastSecond = 0;
 int frameCount = 0;
 
+int framerate = 120;
+
 void Init_Window();
+void Render_FPS();
 void Render_Window();
 void Destroy_Window();
 
 
 int main(void) {
   Init_Window();
-  Render_Window();
+  Render_FPS();
   Destroy_Window();
 
   return 0;
@@ -30,11 +34,34 @@ void Destroy_Window() {
   exit(EXIT_SUCCESS);
 }
 
-void Render_Window() {
-  previousTime = glfwGetTime();
-  frameCount = 0;
+void Render_FPS() {
+  lastSecond = previousTime = glfwGetTime();
+    while (!glfwWindowShouldClose(window)) {
+    currentTime = glfwGetTime();
 
-  while (!glfwWindowShouldClose(window)) {
+      if (currentTime - previousTime >= 1.0 / framerate) {
+        previousTime = currentTime;
+        Render_Window();
+
+        frameCount++;
+      }
+
+    if (currentTime - lastSecond >= 1.0) {
+        
+        printf("\nFPS: %d\n", frameCount);
+        frameCount = 0;
+        lastSecond = currentTime;
+    }
+      
+      
+      
+    }
+}
+
+void Render_Window() {
+  
+
+  
     // Setup view
     int width, height;
     glfwGetFramebufferSize(window, &width, &height);
@@ -45,26 +72,20 @@ void Render_Window() {
     if (glfwGetKey(window, GLFW_KEY_ESCAPE) == GLFW_PRESS)
       glfwSetWindowShouldClose(window, 1);
 
-    // Measure speed
-    currentTime = glfwGetTime();
-    if (currentTime - previousTime >= 1.0 / 60) {
-      frameCount++;
-      // If a second has passed.
-      if (currentTime - previousTime >= 1.0) {
-        // Display the frame count here any way you want.
-        printf("\nFPS: %d\n", frameCount);
-        frameCount = 0;
-        previousTime = currentTime;
-      }
+    
+    
+      
 
       
       
-    }
+    
     // Swap buffers
     glfwSwapBuffers(window);
     glfwPollEvents();
-  }
+  
 }
+
+
 
 void Init_Window() {
   if (!glfwInit()) {
@@ -72,7 +93,7 @@ void Init_Window() {
   }
   glfwWindowHint(GLFW_CONTEXT_VERSION_MAJOR, 2);
   glfwWindowHint(GLFW_CONTEXT_VERSION_MINOR, 0);
-  window = glfwCreateWindow(1024, 384, "Pong", NULL, NULL);
+  window = glfwCreateWindow(1024, 384, "FPS Test", NULL, NULL);
   if (!window) {
     glfwTerminate();
     exit(EXIT_FAILURE);
