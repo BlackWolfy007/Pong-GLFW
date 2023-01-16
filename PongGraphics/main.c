@@ -7,6 +7,9 @@
 static GLFWwindow *window;
 float ratio;
 
+int switcher = 0;
+float resize = 0;
+
 double previousTime = 0;
 double currentTime = 0;
 double previousSecond = 0;
@@ -19,6 +22,7 @@ void Render_FPS();
 void Render_Window();
 void Destroy_Window();
 
+void Rhombus();
 
 int main(void) {
   Init_Window();
@@ -72,12 +76,7 @@ void Render_Window() {
     if (glfwGetKey(window, GLFW_KEY_ESCAPE) == GLFW_PRESS)
       glfwSetWindowShouldClose(window, 1);
 
-    
-    
-      
-
-      
-      
+    Rhombus();
     
     // Swap buffers
     glfwSwapBuffers(window);
@@ -103,3 +102,26 @@ void Init_Window() {
   glfwSwapInterval(0);
 }
 
+void Rhombus() {
+
+  glColor3f(1, 1, 1);
+
+  glBegin(GL_POLYGON);
+  glVertex2d(-0.5 - resize, 0);
+  glVertex2d(0, 0.5);
+  glVertex2d(0.5 + resize, 0);
+  glVertex2d(0, -0.5);
+  glEnd();
+
+  if (!switcher) {
+    resize += 0.01;
+  } else {
+    resize -= 0.01;
+  }
+  if (resize >= 0.35) {
+    switcher = 1;
+  }
+  if (resize <= -0.25) {
+    switcher = 0;
+  }
+}
