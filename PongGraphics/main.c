@@ -26,13 +26,13 @@
 // Color
 // -----------------------------------
 
-// Responsible for the text color
+// Responsible for the text color: red color, green color, blue color
 typedef struct Text_Color {
   float r;
   float g;
   float b;
 } T_Color;
-// Responsible for the object color
+// Responsible for the object color: red color, green color, blue color
 typedef struct Object_Color {
   float r;
   float g;
@@ -43,7 +43,7 @@ typedef struct Object_Color {
 // Object parameters
 // -----------------------------------
 
-// Responsible for the racket parameters
+// Responsible for the racket parameters: x coord, y coord, size by x coord, size by y coord, object color
 typedef struct Racket {
   float x;
   float y;
@@ -51,7 +51,7 @@ typedef struct Racket {
   float y_size;
   O_Color color;
 } T_Racket;
-// Responsible for the ball parameters
+// Responsible for the ball parameters: x coord, y coord, x coord offset, y coord offset, ball radius, ball speedmult, object color
 typedef struct Ball {
   float x;
   float y;
@@ -61,7 +61,7 @@ typedef struct Ball {
   float speedmult;
   O_Color color;
 } T_Ball;
-// Responsible for the score table
+// Responsible for the score table: Player 1 score, Player 2 score
 typedef struct Score {
   int Player_1;
   int Player_2;
@@ -81,6 +81,14 @@ typedef struct Score {
 static GLFWwindow *window;
 // Responsible for the aspect ratio of the window
 float ratio;
+
+// -----------------------------------
+// Framerate parameters
+// -----------------------------------
+
+double previousTime = 0;
+double currentTime = 0;
+int frameCount = 0;
 
 // -----------------------------------
 // Text parameters
@@ -240,6 +248,8 @@ void Draw_P2W();
 void Draw_Pong_Logo();
 // Draws help for controls
 void Draw_Help();
+// Draws FPS
+void Draw_FPS(int framerate);
 
 // ===================================
 //
@@ -326,7 +336,11 @@ void Render_Window() {
   T_Score Score = {0, 0};
   float dy_change = 0.007;
   int unlock_main_menu = 0, unlock_game = 0, hide_help = 0;
-  int count = 0;
+  
+
+  previousTime = glfwGetTime();
+  frameCount = 0;
+
   while (!glfwWindowShouldClose(window)) {
     // Setup view
     int width, height;
@@ -342,6 +356,20 @@ void Render_Window() {
     if (glfwGetKey(window, GLFW_KEY_H) == GLFW_PRESS)
       hide_help = 1;
 
+    // Measure speed
+    currentTime = glfwGetTime();
+    frameCount++;
+    // If a second has passed.
+    if (currentTime - previousTime >= 1.0) {
+      // Display the frame count here any way you want.
+      printf("\nFPS: %d\n", frameCount);
+      printf("speedmult: %f, current_ball->dx: %f, current_ball->dy: %f\n",
+             Ball.speedmult, Ball.dx * Ball.speedmult,
+             Ball.dy * Ball.speedmult);
+      frameCount = 0;
+      previousTime = currentTime;
+    }
+
     if (!unlock_main_menu)
       Draw_Pong_Logo();
     else {
@@ -356,18 +384,14 @@ void Render_Window() {
           Ball_Collide(&Ball, &Left_Rack, &Right_Rack, &Score);
           Increase_Speedmult(&Ball);
         }
+
         if (!hide_help) Draw_Help();
         Draw_Score(Score);
         Draw_Racket(Left_Rack);
         Draw_Racket(Right_Rack);
         Draw_Ball(Ball);
-        if ((count % 100) == 0)
-          printf("speedmult: %f, current_ball->dx: %f, current_ball->dy: %f\n",
-                 Ball.speedmult, Ball.dx * Ball.speedmult,
-                 Ball.dy * Ball.speedmult);
-        count++;
-        if (count > 9999)
-          count = 0;
+        
+
       } else {
         if (Score.Player_1 >= final_score) {
           Draw_P1W();
@@ -596,6 +620,21 @@ void Draw_Help() {
   Draw_Letter('E', 61 + x_pos, 0 + y_pos);
   Draw_Letter('L', 65 + x_pos, 0 + y_pos);
   Draw_Letter('P', 69 + x_pos, 0 + y_pos);
+}
+
+void Draw_FPS(int framerate) {
+  size = 1;
+  Set_Text_Color(0.2, 0.3, 0.4);
+  if (framerate < 10) {
+    Draw_Num(framerate, 0, 0);
+  } else if (framerate < 100) {
+    Draw_Num(framerate / 10, -5, 0);
+    Draw_Num(framerate % 10, 0, 0);
+  } else if (framerate < 1000) {
+    Draw_Num(framerate / 100, -10, 0);
+    Draw_Num((framerate % 100) / 10, -5, 0);
+    Draw_Num(framerate % 10, 0, 0);
+  }
 }
 
 void Draw_Pong_Logo() {
