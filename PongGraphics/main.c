@@ -1449,9 +1449,9 @@ int Left_Racket_Collide(T_Ball *ball, T_Racket *Left_Rack) {
     collide = (((ball->x - ball->radius * cos_x + ball->dx * ball->speedmult) <
                 (Left_Rack->x + Left_Rack->x_size / 2)) &&
                ((ball->y - ball->radius /** sin_y*/) <
-                    (Left_Rack->y + Left_Rack->y_size / 2) /** ratio*/
+                    (Left_Rack->y + Left_Rack->y_size / 2) * ratio
                 && (ball->y + ball->radius /** sin_y*/) >
-                       (Left_Rack->y - Left_Rack->y_size / 2) /* * ratio*/));
+                       (Left_Rack->y - Left_Rack->y_size / 2)  * ratio));
   }
 
   return collide;
@@ -1470,9 +1470,9 @@ int Right_Racket_Collide(T_Ball *ball, T_Racket *Right_Rack) {
     collide = (((ball->x + ball->radius * cos_x + ball->dx * ball->speedmult) >
                 (Right_Rack->x - Right_Rack->x_size / 2)) &&
                ((ball->y - ball->radius /** sin_y*/) <
-                    (Right_Rack->y + Right_Rack->y_size / 2) /** ratio*/
+                    (Right_Rack->y + Right_Rack->y_size / 2) * ratio
                 && (ball->y + ball->radius /** sin_y*/) >
-                       (Right_Rack->y - Right_Rack->y_size / 2) /** ratio*/));
+                       (Right_Rack->y - Right_Rack->y_size / 2) * ratio));
   }
 
   return collide;
@@ -1498,12 +1498,12 @@ int Border_X_Right_Collide(T_Ball *ball) {
 
 int Border_Y_Up_Collide(T_Ball *ball) {
   return (ball->y + ball->dy * ball->speedmult >
-          (1 - ball->radius /** ratio*/));
+          (1 - ball->radius * ratio));
 }
 
 int Border_Y_Down_Collide(T_Ball *ball) {
   return (ball->y + ball->dy * ball->speedmult <
-          (-1 + ball->radius /** ratio*/));
+          (-1 + ball->radius * ratio));
 }
 
 int Border_X_Collide(T_Ball *ball) {
@@ -1544,7 +1544,7 @@ void Increase_Player_1(T_Score *score) { score->Player_1++; }
 
 void Increase_Player_2(T_Score *score) { score->Player_2++; }
 
-void Increase_Speedmult(T_Ball *ball) { /*ball->speedmult += 0.0005;*/ }
+void Increase_Speedmult(T_Ball *ball) { ball->speedmult += 0.0005; }
 
 void Reset_Ball(T_Ball *ball) {
   ball->x = 0;
@@ -1567,20 +1567,20 @@ void Keystroke(GLFWwindow *window, T_Ball *ball, T_Racket *Left_Rack,
   if (glfwGetKey(window, GLFW_KEY_ESCAPE) == GLFW_PRESS)
     glfwSetWindowShouldClose(window, 1);
   if (glfwGetKey(window, GLFW_KEY_A) == GLFW_PRESS)
-    if (Left_Rack->y + dy_change < (1 - Left_Rack->y_size /** ratio*/ / 2 -
-                                    Left_Rack->x_size / 2) /*/ ratio*/)
+    if (Left_Rack->y + dy_change < (1 - Left_Rack->y_size * ratio / 2 -
+                                    Left_Rack->x_size / 2) / ratio)
       Move_Racket(Left_Rack, dy_change);
   if (glfwGetKey(window, GLFW_KEY_Z) == GLFW_PRESS)
-    if (Left_Rack->y - dy_change > (-1 + Left_Rack->y_size /** ratio*/ / 2 +
-                                    Left_Rack->x_size / 2) /*/ ratio*/)
+    if (Left_Rack->y - dy_change > (-1 + Left_Rack->y_size * ratio / 2 +
+                                    Left_Rack->x_size / 2) / ratio)
       Move_Racket(Left_Rack, -dy_change);
   if (glfwGetKey(window, GLFW_KEY_K) == GLFW_PRESS)
-    if (Right_Rack->y + dy_change < (1 - Right_Rack->y_size /** ratio*/ / 2 -
-                                     Right_Rack->x_size / 2) /*/ ratio*/)
+    if (Right_Rack->y + dy_change < (1 - Right_Rack->y_size * ratio / 2 -
+                                     Right_Rack->x_size / 2) / ratio)
       Move_Racket(Right_Rack, dy_change);
   if (glfwGetKey(window, GLFW_KEY_M) == GLFW_PRESS)
-    if (Right_Rack->y - dy_change > (-1 + Right_Rack->y_size /** ratio*/ / 2 +
-                                     Right_Rack->x_size / 2) /*/ ratio*/)
+    if (Right_Rack->y - dy_change > (-1 + Right_Rack->y_size * ratio / 2 +
+                                     Right_Rack->x_size / 2) / ratio)
       Move_Racket(Right_Rack, -dy_change);
   if (glfwGetKey(window, GLFW_KEY_R) == GLFW_PRESS) {
     Reset_Round(ball, Left_Rack, Right_Rack);
@@ -1592,7 +1592,7 @@ void Draw_Ball(T_Ball bll) {
   glBegin(GL_POLYGON);
   for (float i = 0; i < 360; i++) {
     glVertex2d((cos(DEG2RAD * i) * bll.radius + bll.x),
-               (sin(DEG2RAD * i) * bll.radius /** ratio*/ + bll.y));
+               (sin(DEG2RAD * i) * bll.radius * ratio + bll.y));
   }
   glEnd();
 }
@@ -1601,16 +1601,16 @@ void Draw_Racket(T_Racket racket) {
   glColor3f(racket.color.r, racket.color.g, racket.color.b);
   glBegin(GL_POLYGON);
   glVertex2d(racket.x - racket.x_size / 2,
-             (racket.y - racket.y_size / 2) /** ratio*/);
+             (racket.y - racket.y_size / 2) * ratio);
   glVertex2d(racket.x + racket.x_size / 2,
-             (racket.y - racket.y_size / 2) /** ratio*/);
+             (racket.y - racket.y_size / 2) * ratio);
   glVertex2d(racket.x + racket.x_size / 2,
-             (racket.y + racket.y_size / 2) /** ratio*/);
+             (racket.y + racket.y_size / 2) * ratio);
   glVertex2d(racket.x - racket.x_size / 2,
-             (racket.y + racket.y_size / 2) /** ratio*/);
+             (racket.y + racket.y_size / 2) * ratio);
   glEnd();
   glBegin(GL_POLYGON);
-  /*for (float i = 0; i < 360; i++) {
+  for (float i = 0; i < 360; i++) {
     glVertex2d((cos(DEG2RAD * i) * racket.x_size / 2 + racket.x),
         (sin(DEG2RAD * i) * racket.x_size / 2 + racket.y_size / 2 + racket.y) *
             ratio);
@@ -1623,7 +1623,7 @@ void Draw_Racket(T_Racket racket) {
         (sin(DEG2RAD * i) * racket.x_size / 2 - racket.y_size / 2 + racket.y) *
             ratio);
   }
-  glEnd();*/
+  glEnd();
 }
 
 void Draw_Score(T_Score score) {
