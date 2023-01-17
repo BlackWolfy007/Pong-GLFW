@@ -86,9 +86,16 @@ float ratio;
 // Framerate parameters
 // -----------------------------------
 
+// Responsible for the previous part of second
 double previousTime = 0;
+// Responsible for the current part of second
 double currentTime = 0;
+// Responsible for the previous second
+double previousSecond = 0;
+// Responsible for framerate indicator
 int frameCount = 0;
+// Responsible for the framerate lock
+int framerate = 120;
 
 // -----------------------------------
 // Text parameters
@@ -111,6 +118,13 @@ const int final_score = 5;
 const float DEG2RAD = 3.14159 / 180;
 // Responsible for the default speed of the ball
 const float default_speed = 0.01;
+
+T_Ball Ball;
+T_Racket Left_Rack = {-0.92, 0, 0.03, 0.20, {1, 1, 1}},
+         Right_Rack = {0.92, 0, 0.03, 0.20, {1, 1, 1}};
+T_Score Score = {0, 0};
+float dy_change = 0.007;
+int unlock_main_menu = 0, unlock_game = 0, hide_help = 0;
 
 // ===================================
 // 
@@ -257,6 +271,8 @@ void Draw_FPS(int framerate);
 //
 // ===================================
 
+void Ball_Init();
+
 // Changes the position of the racket with an offset along the Y coordinate by the received value
 void Move_Racket(T_Racket *racket, float dy);
 
@@ -305,6 +321,8 @@ void Draw_Score(T_Score score);
 // Responsible for the window initialization 
 void Init_Window();
 // Responsible for the window render process
+void Render_FPS();
+// Responsible for the one frame render process
 void Render_Window();
 // Responsible for the window destruction
 void Destroy_Window();
@@ -317,11 +335,13 @@ void Destroy_Window();
 
 int main(void) {
   Init_Window();
-  Render_Window();
+  Render_FPS();
   Destroy_Window();
 
   return 0;
 }
+
+
 
 void Destroy_Window() {
   glfwDestroyWindow(window);
@@ -330,18 +350,7 @@ void Destroy_Window() {
 }
 
 void Render_Window() {
-  T_Ball Ball = {0, 0, 0.01, 0.001, 0.03, default_speed, {0.95, 0.95, 0.95}};
-  T_Racket Left_Rack = {-0.92, 0, 0.03, 0.20, {1, 1, 1}},
-           Right_Rack = {0.92, 0, 0.03, 0.20, {1, 1, 1}};
-  T_Score Score = {0, 0};
-  float dy_change = 0.007;
-  int unlock_main_menu = 0, unlock_game = 0, hide_help = 0;
-  
-
-  previousTime = glfwGetTime();
-  frameCount = 0;
-
-  while (!glfwWindowShouldClose(window)) {
+    
     // Setup view
     int width, height;
     glfwGetFramebufferSize(window, &width, &height);
@@ -356,19 +365,10 @@ void Render_Window() {
     if (glfwGetKey(window, GLFW_KEY_H) == GLFW_PRESS)
       hide_help = 1;
 
-    // Measure speed
-    currentTime = glfwGetTime();
-    frameCount++;
-    // If a second has passed.
-    if (currentTime - previousTime >= 1.0) {
-      // Display the frame count here any way you want.
-      printf("\nFPS: %d\n", frameCount);
-      printf("speedmult: %f, current_ball->dx: %f, current_ball->dy: %f\n",
-             Ball.speedmult, Ball.dx * Ball.speedmult,
-             Ball.dy * Ball.speedmult);
-      frameCount = 0;
-      previousTime = currentTime;
-    }
+    
+      
+      
+      
 
     if (!unlock_main_menu)
       Draw_Pong_Logo();
@@ -408,6 +408,32 @@ void Render_Window() {
     // Swap buffers
     glfwSwapBuffers(window);
     glfwPollEvents();
+  
+}
+
+void Render_FPS() { 
+    Ball_Init();
+
+    previousSecond = previousTime = glfwGetTime();
+
+  while (!glfwWindowShouldClose(window)) {
+    currentTime = glfwGetTime();
+
+    if (currentTime - previousTime >= 1.0 / framerate) {
+      previousTime = currentTime;
+      Render_Window();
+
+      frameCount++;
+    }
+
+    if (currentTime - previousSecond >= 1.0) {
+      printf("\nFPS: %d\n", frameCount);
+      printf("speedmult: %f, current_ball->dx: %f, current_ball->dy: %f\n",
+             Ball.speedmult, Ball.dx * Ball.speedmult,
+             Ball.dy * Ball.speedmult);
+      frameCount = 0;
+      previousSecond = currentTime;
+    }
   }
 }
 
@@ -1318,6 +1344,15 @@ void Draw_Exclamination(float x, float y) {
         Draw_Pixel(j, i);
     }
   }
+}
+
+void Ball_Init() {
+  Ball.x = Ball.y = 0;
+  Ball.dx = 0.01;
+  Ball.dy = 0.001;
+  Ball.radius = 0.03;
+  Ball.speedmult = default_speed;
+  Ball.color.r = Ball.color.g = Ball.color.b = 0.95;
 }
 
 void Move_Racket(T_Racket *racket, float dy) { racket->y += dy; }
