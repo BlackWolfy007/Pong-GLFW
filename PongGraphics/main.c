@@ -32,6 +32,7 @@ typedef struct Text_Color {
   float g;
   float b;
 } T_Color;
+
 // Responsible for the object color: red color, green color, blue color
 typedef struct Object_Color {
   float r;
@@ -51,6 +52,7 @@ typedef struct Racket {
   float y_size;
   O_Color color;
 } T_Racket;
+
 // Responsible for the ball parameters: x coord, y coord, x coord offset, y coord offset, ball radius, ball speedmult, object color
 typedef struct Ball {
   float x;
@@ -61,6 +63,7 @@ typedef struct Ball {
   float speedmult;
   O_Color color;
 } T_Ball;
+
 // Responsible for the score table: Player 1 score, Player 2 score
 typedef struct Score {
   int Player_1;
@@ -79,6 +82,7 @@ typedef struct Score {
 
 // Responsible for window parameters
 static GLFWwindow *window;
+
 // Responsible for the aspect ratio of the window
 float ratio;
 
@@ -88,14 +92,18 @@ float ratio;
 
 // Responsible for the previous part of second
 double previousTime = 0;
+
 // Responsible for the current part of second
 double currentTime = 0;
+
 // Responsible for the previous second
 double previousSecond = 0;
+
 // Responsible for framerate indicator
 int frameCount = 0;
+
 // Responsible for the framerate lock
-int framerate = 120;
+int framerate = 60;
 
 // -----------------------------------
 // Text parameters
@@ -103,12 +111,18 @@ int framerate = 120;
 
 // Responsible for the size of the text
 static float size = 1;
+
 // Responsible for the grid size for the text
 static float grid_coeff = 0.04444444444;
+
 // Responsible for the text color
 T_Color text_color = {1, 1, 1};
+
 // Responsible for the number of points needed to win
 const int final_score = 5;
+
+// Scoreboard object
+T_Score Score = {0, 0};
 
 // -----------------------------------
 // Ball parameters
@@ -116,15 +130,38 @@ const int final_score = 5;
 
 // Used when converting degrees to radians
 const float DEG2RAD = 3.14159 / 180;
+
 // Responsible for the default speed of the ball
 const float default_speed = 0.01;
 
+// Ball object
 T_Ball Ball;
-T_Racket Left_Rack = {-0.92, 0, 0.03, 0.20, {1, 1, 1}},
-         Right_Rack = {0.92, 0, 0.03, 0.20, {1, 1, 1}};
-T_Score Score = {0, 0};
+
+// -----------------------------------
+// Racket parameters
+// -----------------------------------
+
+// Left racket object
+T_Racket Left_Rack = {-0.92, 0, 0.03, 0.20, {1, 1, 1}};
+
+// Right racket object
+T_Racket Right_Rack = {0.92, 0, 0.03, 0.20, {1, 1, 1}};
+
+// Racket speed
 float dy_change = 0.007;
-int unlock_main_menu = 0, unlock_game = 0, hide_help = 0;
+
+// -----------------------------------
+// Game states parameters
+// -----------------------------------
+
+// Responsible for game start
+int unlock_main_menu = 0;
+
+// Responsible for pause before game start
+int unlock_game = 0;
+
+// Responsible for help disable
+int hide_help = 0;
 
 // ===================================
 // 
@@ -158,22 +195,31 @@ void Draw_Letter(char character, float x, float y);
 
 // Draws character '0'
 void Draw_0(float x, float y);
+
 // Draws character '1'
 void Draw_1(float x, float y);
+
 // Draws character '2'
 void Draw_2(float x, float y);
+
 // Draws character '3'
 void Draw_3(float x, float y);
+
 // Draws character '4'
 void Draw_4(float x, float y);
+
 // Draws character '5'
 void Draw_5(float x, float y);
+
 // Draws character '6'
 void Draw_6(float x, float y);
+
 // Draws character '7'
 void Draw_7(float x, float y);
+
 // Draws character '8'
 void Draw_8(float x, float y);
+
 // Draws character '9'
 void Draw_9(float x, float y);
 
@@ -183,54 +229,79 @@ void Draw_9(float x, float y);
 
 // Draws character 'A' or 'a'
 void Draw_A(float x, float y);
+
 // Draws character 'B' or 'b'
 void Draw_B(float x, float y);
+
 // Draws character 'C' or 'c'
 void Draw_C(float x, float y);
+
 // Draws character 'D' or 'd'
 void Draw_D(float x, float y);
+
 // Draws character 'E' or 'e'
 void Draw_E(float x, float y);
+
 // Draws character 'F' or 'f'
 void Draw_F(float x, float y);
+
 // Draws character 'G' or 'g'
 void Draw_G(float x, float y);
+
 // Draws character 'H' or 'h'
 void Draw_H(float x, float y);
+
 // Draws character 'I' or 'i'
 void Draw_I(float x, float y);
+
 // Draws character 'J' or 'j'
 void Draw_J(float x, float y);
+
 // Draws character 'K' or 'k'
 void Draw_K(float x, float y);
+
 // Draws character 'L' or 'l'
 void Draw_L(float x, float y);
+
 // Draws character 'M' or 'm'
 void Draw_M(float x, float y);
+
 // Draws character 'N' or 'n'
 void Draw_N(float x, float y);
+
 // Draws character 'O' or 'o'
 void Draw_O(float x, float y);
+
 // Draws character 'P' or 'p'
 void Draw_P(float x, float y);
+
 // Draws character 'Q' or 'q'
 void Draw_Q(float x, float y);
+
 // Draws character 'R' or 'r'
 void Draw_R(float x, float y);
+
 // Draws character 'S' or 's'
 void Draw_S(float x, float y);
+
 // Draws character 'T' or 't'
 void Draw_T(float x, float y);
+
 // Draws character 'U' or 'u'
 void Draw_U(float x, float y);
+
 // Draws character 'V' or 'v'
 void Draw_V(float x, float y);
+
 // Draws character 'W' or 'w'
 void Draw_W(float x, float y);
+
 // Draws character 'X' or 'x'
 void Draw_X(float x, float y);
+
 // Draws character 'Y' or 'y'
 void Draw_Y(float x, float y);
+
 // Draws character 'Z' or 'z'
 void Draw_Z(float x, float y);
 
@@ -240,6 +311,7 @@ void Draw_Z(float x, float y);
 
 // Draws character ':'
 void Draw_Colon(float x, float y);
+
 // Draws character '!'
 void Draw_Exclamination(float x, float y);
 
@@ -256,12 +328,16 @@ void Draw_Char_Test();
 
 // Draws "P1 WON!"
 void Draw_P1W();
+
 // Draws "P2 WON!"
 void Draw_P2W();
+
 // Draws "Pong"
 void Draw_Pong_Logo();
+
 // Draws help for controls
 void Draw_Help();
+
 // Draws FPS
 void Draw_FPS(int framerate);
 
@@ -271,11 +347,13 @@ void Draw_FPS(int framerate);
 //
 // ===================================
 
+// Sets the default parameters for the ball
 void Ball_Init();
 
 // Changes the position of the racket with an offset along the Y coordinate by the received value
 void Move_Racket(T_Racket *racket, float dy);
 
+// Collider of ball with racket
 int Racket_Collide(T_Ball *ball, T_Racket *Left_Rack, T_Racket *Right_Rack);
 int Border_X_Left_Collide(T_Ball *ball);
 int Border_X_Right_Collide(T_Ball *ball);
@@ -286,18 +364,25 @@ int Border_X_Collide(T_Ball *ball);
 int Border_Y_Collide(T_Ball *ball);
 void Ball_Collide(T_Ball *ball, T_Racket *Left_Rack, T_Racket *Right_Rack,
                   T_Score *Score);
+
 // Increases the score for Player 1 by 1
 void Increase_Player_1(T_Score *score);
+
 // Increases the score for Player 2 by 1
 void Increase_Player_2(T_Score *score);
+
 // Increases the speed multiplier for ball
 void Increase_Speedmult(T_Ball *ball);
+
 // Resets the ball parameters
 void Reset_Ball(T_Ball *ball);
+
 // Resets the racket parameters
 void Reset_racket(T_Racket *racket);
+
 // Resets the round
 void Reset_Round(T_Ball *ball, T_Racket *Left_Rack, T_Racket *Right_Rack);
+
 // Responsible for handling keys
 void Keystroke(GLFWwindow *window, T_Ball *ball, T_Racket *Left_Rack,
                T_Racket *Right_Rack, float dy_change);
@@ -308,8 +393,13 @@ void Keystroke(GLFWwindow *window, T_Ball *ball, T_Racket *Left_Rack,
 //
 // ===================================
 
+// Draws the ball sprite
 void Draw_Ball(T_Ball bll);
+
+// Draws the rocket sprite
 void Draw_Racket(T_Racket racket);
+
+// Draws the score text
 void Draw_Score(T_Score score);
 
 // ===================================
@@ -320,10 +410,13 @@ void Draw_Score(T_Score score);
 
 // Responsible for the window initialization 
 void Init_Window();
+
 // Responsible for the window render process
 void Render_FPS();
+
 // Responsible for the one frame render process
 void Render_Window();
+
 // Responsible for the window destruction
 void Destroy_Window();
 
@@ -341,8 +434,6 @@ int main(void) {
   return 0;
 }
 
-
-
 void Destroy_Window() {
   glfwDestroyWindow(window);
   glfwTerminate();
@@ -350,7 +441,6 @@ void Destroy_Window() {
 }
 
 void Render_Window() {
-    
     // Setup view
     int width, height;
     glfwGetFramebufferSize(window, &width, &height);
@@ -364,11 +454,6 @@ void Render_Window() {
       glfwSetWindowShouldClose(window, 1);
     if (glfwGetKey(window, GLFW_KEY_H) == GLFW_PRESS)
       hide_help = 1;
-
-    
-      
-      
-      
 
     if (!unlock_main_menu)
       Draw_Pong_Logo();
@@ -450,10 +535,8 @@ void Init_Window() {
   }
   glfwMakeContextCurrent(window);
 
-  glfwSwapInterval(1);
+  glfwSwapInterval(0);
 }
-
-
 
 void Set_Text_Color(float r, float g, float b) {
   text_color.r = r;
