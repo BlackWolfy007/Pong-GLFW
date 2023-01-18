@@ -74,10 +74,10 @@ typedef struct Score {
 // Game parameters
 // -----------------------------------
 
-// Responsible for the states of the game: options menu, main menu, gameplay
+// Responsible for the menus of the game: options menu, main menu, gameplay
 // process, game result
-enum E_Game_States { OPTIONS = -1, MAIN_MENU, GAME, WIN };
-typedef enum E_Game_States Game_State;
+enum E_Game_Menus { OPTIONS = -1, MAIN_MENU, GAME, WIN };
+typedef enum E_Game_Menus Game_Menu;
 
 // ===================================
 // 
@@ -141,7 +141,7 @@ T_Score Score = {0, 0};
 const float DEG2RAD = 3.14159 / 180;
 
 // Responsible for the default speed of the ball
-const float default_speed = 0.01;
+const float default_speed = 0.07;
 
 // Ball object
 T_Ball Ball;
@@ -172,7 +172,7 @@ int unlock_game = 0;
 // Responsible for help disable
 int hide_help = 0;
 
-Game_State G_State = MAIN_MENU;
+Game_Menu G_Menu = MAIN_MENU;
 
 // ===================================
 // 
@@ -459,43 +459,51 @@ void Render_Window() {
     glViewport(0, 0, width, height);
     glClear(GL_COLOR_BUFFER_BIT);
 
-    if (glfwGetKey(window, GLFW_KEY_SPACE) == GLFW_PRESS)
-      unlock_main_menu = 1;
-    if (glfwGetKey(window, GLFW_KEY_ESCAPE) == GLFW_PRESS)
-      glfwSetWindowShouldClose(window, 1);
-    if (glfwGetKey(window, GLFW_KEY_H) == GLFW_PRESS)
-      hide_help = 1;
+    if (glfwGetKey(window, GLFW_KEY_SPACE) == GLFW_PRESS) G_Menu = GAME;
+    if (glfwGetKey(window, GLFW_KEY_ESCAPE) == GLFW_PRESS) glfwSetWindowShouldClose(window, 1);
+    
 
-    if (!unlock_main_menu) {
+    if (G_Menu == OPTIONS) {
+      if (glfwGetKey(window, GLFW_KEY_Q) == GLFW_PRESS) {
+        G_Menu = MAIN_MENU;
+      }
+
+    }
+
+    if (G_Menu == MAIN_MENU) {
+      if (glfwGetKey(window, GLFW_KEY_P) == GLFW_PRESS) {
+        G_Menu = OPTIONS;
+      }
+
       Draw_Pong_Logo();
     }
-      
-    else {
-      if (Score.Player_1 < final_score && Score.Player_2 < final_score) {
-        // Key Check
-        if (glfwGetKey(window, GLFW_KEY_SPACE) == GLFW_RELEASE)
-          unlock_game = 1;
+    if (G_Menu == GAME) {
+      // Key Check
+      if (glfwGetKey(window, GLFW_KEY_SPACE) == GLFW_RELEASE) unlock_game = 1;
+      if (glfwGetKey(window, GLFW_KEY_H) == GLFW_PRESS) hide_help = 1;
 
-        if (unlock_game) {
-          Keystroke(window, &Ball, &Left_Rack, &Right_Rack, dy_change);
+      if (unlock_game) {
+        Keystroke(window, &Ball, &Left_Rack, &Right_Rack, dy_change);
 
-          Ball_Collide(&Ball, &Left_Rack, &Right_Rack, &Score);
-          Increase_Speedmult(&Ball);
-        }
+        Ball_Collide(&Ball, &Left_Rack, &Right_Rack, &Score);
+        Increase_Speedmult(&Ball);
+      }
 
-        if (!hide_help) Draw_Help();
-        Draw_Score(Score);
-        Draw_Racket(Left_Rack);
-        Draw_Racket(Right_Rack);
-        Draw_Ball(Ball);
-        
+      if (!hide_help) Draw_Help();
+      Draw_Score(Score);
+      Draw_Racket(Left_Rack);
+      Draw_Racket(Right_Rack);
+      Draw_Ball(Ball);
 
+      if (Score.Player_1 >= final_score || Score.Player_2 >= final_score) {
+        G_Menu = WIN;
+      }
+    }
+    if (G_Menu == WIN) {
+      if (Score.Player_1 >= final_score) {
+        Draw_P1W();
       } else {
-        if (Score.Player_1 >= final_score) {
-          Draw_P1W();
-        } else {
-          Draw_P2W();
-        }
+        Draw_P2W();
       }
     }
     // Draw_Char_Test();
