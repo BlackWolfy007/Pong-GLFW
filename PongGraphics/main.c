@@ -69,7 +69,8 @@ void Render_Window() {
 
         //Draw_Nums_Test();
         //Draw_P1W();
-        Draw_P2W();
+        //Draw_P2W();
+        Game_Init();
 
         // Swap buffers
         glfwSwapBuffers(window);
