@@ -26,14 +26,14 @@
 // Color
 // -----------------------------------
 
-// Responsible for the text color: red color, green color, blue color
+// Responsible for the text color: r - red color, g - green color, b - blue color
 typedef struct Text_Color {
   float r;
   float g;
   float b;
 } T_Color;
 
-// Responsible for the object color: red color, green color, blue color
+// Responsible for the object color: r - red color, g - green color, b - blue color
 typedef struct Object_Color {
   float r;
   float g;
@@ -44,7 +44,7 @@ typedef struct Object_Color {
 // Object parameters
 // -----------------------------------
 
-// Responsible for the racket parameters: x coord, y coord, size by x coord, size by y coord, object color
+// Responsible for the racket parameters: x - x coord, y - y coord, x_size - size by x coord, y_size - size by y coord, color - object color
 typedef struct Racket {
   float x;
   float y;
@@ -53,7 +53,7 @@ typedef struct Racket {
   O_Color color;
 } T_Racket;
 
-// Responsible for the ball parameters: x coord, y coord, x coord offset, y coord offset, ball radius, ball speedmult, object color
+// Responsible for the ball parameters: x - x coord, y - y coord, dx - x coord offset, dy - y coord offset, radius - ball radius, speedmult - ball speedmult, color - object color
 typedef struct Ball {
   float x;
   float y;
@@ -64,11 +64,20 @@ typedef struct Ball {
   O_Color color;
 } T_Ball;
 
-// Responsible for the score table: Player 1 score, Player 2 score
+// Responsible for the score table: Player_1 - Player 1 score, Player_2 - Player 2 score
 typedef struct Score {
   int Player_1;
   int Player_2;
 } T_Score;
+
+// -----------------------------------
+// Game parameters
+// -----------------------------------
+
+// Responsible for the states of the game: options menu, main menu, gameplay
+// process, game result
+enum E_Game_States { OPTIONS = -1, MAIN_MENU, GAME, WIN };
+typedef enum E_Game_States Game_State;
 
 // ===================================
 // 
@@ -162,6 +171,8 @@ int unlock_game = 0;
 
 // Responsible for help disable
 int hide_help = 0;
+
+Game_State G_State = MAIN_MENU;
 
 // ===================================
 // 
@@ -455,8 +466,10 @@ void Render_Window() {
     if (glfwGetKey(window, GLFW_KEY_H) == GLFW_PRESS)
       hide_help = 1;
 
-    if (!unlock_main_menu)
+    if (!unlock_main_menu) {
       Draw_Pong_Logo();
+    }
+      
     else {
       if (Score.Player_1 < final_score && Score.Player_2 < final_score) {
         // Key Check
@@ -1446,7 +1459,7 @@ int Left_Racket_Collide(T_Ball *ball, T_Racket *Left_Rack) {
   for (int i = 90; i <= 270; i++) {
     sin_y = sin(DEG2RAD * i);
     cos_x = cos(DEG2RAD * i);
-    collide = (((ball->x - ball->radius * cos_x + ball->dx * ball->speedmult) <
+    collide = (((ball->x - ball->radius + ball->dx * ball->speedmult) <
                 (Left_Rack->x + Left_Rack->x_size / 2)) &&
                ((ball->y - ball->radius /** sin_y*/) <
                     (Left_Rack->y + Left_Rack->y_size / 2) * ratio
@@ -1467,7 +1480,7 @@ int Right_Racket_Collide(T_Ball *ball, T_Racket *Right_Rack) {
   for (int i = 270; i <= 450; i++) {
     sin_y = sin(DEG2RAD * i);
     cos_x = cos(DEG2RAD * i);
-    collide = (((ball->x + ball->radius * cos_x + ball->dx * ball->speedmult) >
+    collide = (((ball->x + ball->radius + ball->dx * ball->speedmult) >
                 (Right_Rack->x - Right_Rack->x_size / 2)) &&
                ((ball->y - ball->radius /** sin_y*/) <
                     (Right_Rack->y + Right_Rack->y_size / 2) * ratio
