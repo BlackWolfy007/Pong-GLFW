@@ -75,8 +75,8 @@ typedef struct Score {
 // -----------------------------------
 
 // Responsible for the menus of the game: options menu, main menu, gameplay
-// process, game result
-enum E_Game_Menus { OPTIONS = -1, MAIN_MENU, GAME, WIN };
+// process, game result, debug mode
+enum E_Game_Menus { OPTIONS = -1, MAIN_MENU, GAME, WIN, TEST_MENU };
 typedef enum E_Game_Menus Game_Menu;
 
 // ===================================
@@ -459,10 +459,6 @@ void Render_Window() {
     glViewport(0, 0, width, height);
     glClear(GL_COLOR_BUFFER_BIT);
 
-    if (glfwGetKey(window, GLFW_KEY_SPACE) == GLFW_PRESS) G_Menu = GAME;
-    if (glfwGetKey(window, GLFW_KEY_ESCAPE) == GLFW_PRESS) glfwSetWindowShouldClose(window, 1);
-    
-
     if (G_Menu == OPTIONS) {
       if (glfwGetKey(window, GLFW_KEY_Q) == GLFW_PRESS) {
         G_Menu = MAIN_MENU;
@@ -471,9 +467,11 @@ void Render_Window() {
     }
 
     if (G_Menu == MAIN_MENU) {
-      if (glfwGetKey(window, GLFW_KEY_P) == GLFW_PRESS) {
-        G_Menu = OPTIONS;
-      }
+      if (glfwGetKey(window, GLFW_KEY_ESCAPE) == GLFW_PRESS)
+        glfwSetWindowShouldClose(window, 1);
+      if (glfwGetKey(window, GLFW_KEY_O) == GLFW_PRESS) G_Menu = OPTIONS;
+      if (glfwGetKey(window, GLFW_KEY_SPACE) == GLFW_PRESS) G_Menu = GAME;
+      if (glfwGetKey(window, GLFW_KEY_0) == GLFW_PRESS) G_Menu = TEST_MENU;
 
       Draw_Pong_Logo();
     }
@@ -500,16 +498,30 @@ void Render_Window() {
       }
     }
     if (G_Menu == WIN) {
+      if (glfwGetKey(window, GLFW_KEY_ESCAPE) == GLFW_PRESS)
+        glfwSetWindowShouldClose(window, 1);
+
       if (Score.Player_1 >= final_score) {
         Draw_P1W();
       } else {
         Draw_P2W();
       }
     }
-    // Draw_Char_Test();
-    // Draw_P1W();
-    // Draw_P2W();
-    // Draw_Pong_Logo();
+    if (G_Menu == TEST_MENU) {
+      if (glfwGetKey(window, GLFW_KEY_ESCAPE) == GLFW_PRESS)
+        glfwSetWindowShouldClose(window, 1);
+      if (glfwGetKey(window, GLFW_KEY_1) == GLFW_PRESS) Draw_Char_Test();
+      if (glfwGetKey(window, GLFW_KEY_2) == GLFW_PRESS) Draw_Pong_Logo();
+      if (glfwGetKey(window, GLFW_KEY_3) == GLFW_PRESS) Draw_P1W();
+      if (glfwGetKey(window, GLFW_KEY_4) == GLFW_PRESS) Draw_P2W();
+      if (glfwGetKey(window, GLFW_KEY_5) == GLFW_PRESS) Draw_Score(Score);
+      if (glfwGetKey(window, GLFW_KEY_6) == GLFW_PRESS) Draw_Help();
+      if (glfwGetKey(window, GLFW_KEY_7) == GLFW_PRESS) {
+        Draw_Racket(Left_Rack);
+        Draw_Racket(Right_Rack);
+        Draw_Ball(Ball);
+      }
+    }
 
     // Swap buffers
     glfwSwapBuffers(window);
@@ -568,6 +580,7 @@ void Set_Text_Color(float r, float g, float b) {
 void Draw_Char_Test() {
   int x = -42, y = 13;
   size = 1;
+  Set_Text_Color(1, 1, 1);
   for (int i = 6 + y, num = 0; i > -1 + y; i -= 6) {
     for (int j = -15 + x; j < 2 + x; j += 4, num++) {
       Draw_Num(num, j, i);
@@ -1585,9 +1598,7 @@ void Reset_Round(T_Ball *ball, T_Racket *Left_Rack, T_Racket *Right_Rack) {
 
 void Keystroke(GLFWwindow *window, T_Ball *ball, T_Racket *Left_Rack,
                T_Racket *Right_Rack, float dy_change) {
-  if (glfwGetKey(window, GLFW_KEY_ESCAPE) == GLFW_PRESS)
-    glfwSetWindowShouldClose(window, 1);
-  if (glfwGetKey(window, GLFW_KEY_A) == GLFW_PRESS)
+    if (glfwGetKey(window, GLFW_KEY_A) == GLFW_PRESS)
     if (Left_Rack->y + dy_change < (1 - Left_Rack->y_size * ratio / 2 -
                                     Left_Rack->x_size / 2) / ratio)
       Move_Racket(Left_Rack, dy_change);
