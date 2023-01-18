@@ -673,6 +673,7 @@ void Draw_P2W() {
   Draw_Letter('S', 26 + x_pos, 0 + y_pos);
   Draw_Letter('C', 30 + x_pos, 0 + y_pos);
 
+
   Draw_Letter('T', 36 + x_pos, 0 + y_pos);
   Draw_Letter('O', 40 + x_pos, 0 + y_pos);
 
