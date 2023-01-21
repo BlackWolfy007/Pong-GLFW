@@ -600,6 +600,7 @@ void Draw_Char_Test() {
 
   Draw_Colon(-58, -6);
   Draw_Exclamination(-56, -6);
+
 }
 
 void Draw_P1W() {
