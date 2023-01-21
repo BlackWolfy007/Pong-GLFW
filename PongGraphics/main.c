@@ -1,7 +1,7 @@
 // ===================================
-// 
+//
 // GLFW
-// 
+//
 // ===================================
 
 #include "include/GLFW/glfw3.h"
@@ -19,21 +19,23 @@
 // ===================================
 //
 // Structures declaration
-// 
+//
 // ===================================
 
 // -----------------------------------
 // Color
 // -----------------------------------
 
-// Responsible for the text color: r - red color, g - green color, b - blue color
+// Responsible for the text color: r - red color, g - green color, b - blue
+// color
 typedef struct Text_Color {
   float r;
   float g;
   float b;
 } T_Color;
 
-// Responsible for the object color: r - red color, g - green color, b - blue color
+// Responsible for the object color: r - red color, g - green color, b - blue
+// color
 typedef struct Object_Color {
   float r;
   float g;
@@ -44,7 +46,8 @@ typedef struct Object_Color {
 // Object parameters
 // -----------------------------------
 
-// Responsible for the racket parameters: x - x coord, y - y coord, x_size - size by x coord, y_size - size by y coord, color - object color
+// Responsible for the racket parameters: x - x coord, y - y coord, x_size -
+// size by x coord, y_size - size by y coord, color - object color
 typedef struct Racket {
   float x;
   float y;
@@ -53,7 +56,9 @@ typedef struct Racket {
   O_Color color;
 } T_Racket;
 
-// Responsible for the ball parameters: x - x coord, y - y coord, dx - x coord offset, dy - y coord offset, radius - ball radius, speedmult - ball speedmult, color - object color
+// Responsible for the ball parameters: x - x coord, y - y coord, dx - x coord
+// offset, dy - y coord offset, radius - ball radius, speedmult - ball
+// speedmult, color - object color
 typedef struct Ball {
   float x;
   float y;
@@ -64,7 +69,8 @@ typedef struct Ball {
   O_Color color;
 } T_Ball;
 
-// Responsible for the score table: Player_1 - Player 1 score, Player_2 - Player 2 score
+// Responsible for the score table: Player_1 - Player 1 score, Player_2 - Player
+// 2 score
 typedef struct Score {
   int Player_1;
   int Player_2;
@@ -80,9 +86,9 @@ enum E_Game_Menus { OPTIONS = -1, MAIN_MENU, GAME, WIN, TEST_MENU };
 typedef enum E_Game_Menus Game_Menu;
 
 // ===================================
-// 
+//
 // Global variables
-// 
+//
 // ===================================
 
 // -----------------------------------
@@ -175,9 +181,9 @@ int hide_help = 0;
 Game_Menu G_Menu = MAIN_MENU;
 
 // ===================================
-// 
+//
 // Text drawing functions
-// 
+//
 // ===================================
 
 // -----------------------------------
@@ -349,9 +355,6 @@ void Draw_Pong_Logo();
 // Draws help for controls
 void Draw_Help();
 
-// Draws FPS
-void Draw_FPS(int framerate);
-
 // ===================================
 //
 // Game mechanics functions
@@ -361,7 +364,8 @@ void Draw_FPS(int framerate);
 // Sets the default parameters for the ball
 void Ball_Init();
 
-// Changes the position of the racket with an offset along the Y coordinate by the received value
+// Changes the position of the racket with an offset along the Y coordinate by
+// the received value
 void Move_Racket(T_Racket *racket, float dy);
 
 // Collider of ball with racket
@@ -419,7 +423,7 @@ void Draw_Score(T_Score score);
 //
 // ===================================
 
-// Responsible for the window initialization 
+// Responsible for the window initialization
 void Init_Window();
 
 // Responsible for the window render process
@@ -452,87 +456,85 @@ void Destroy_Window() {
 }
 
 void Render_Window() {
-    // Setup view
-    int width, height;
-    glfwGetFramebufferSize(window, &width, &height);
-    ratio = width / (float)height;
-    glViewport(0, 0, width, height);
-    glClear(GL_COLOR_BUFFER_BIT);
+  // Setup view
+  int width, height;
+  glfwGetFramebufferSize(window, &width, &height);
+  ratio = width / (float)height;
+  glViewport(0, 0, width, height);
+  glClear(GL_COLOR_BUFFER_BIT);
 
-    if (G_Menu == OPTIONS) {
-      if (glfwGetKey(window, GLFW_KEY_Q) == GLFW_PRESS) {
-        G_Menu = MAIN_MENU;
-      }
+  if (G_Menu == OPTIONS) {
+    if (glfwGetKey(window, GLFW_KEY_Q) == GLFW_PRESS) {
+      G_Menu = MAIN_MENU;
+    }
+  }
 
+  if (G_Menu == MAIN_MENU) {
+    if (glfwGetKey(window, GLFW_KEY_ESCAPE) == GLFW_PRESS)
+      glfwSetWindowShouldClose(window, 1);
+    if (glfwGetKey(window, GLFW_KEY_O) == GLFW_PRESS) G_Menu = OPTIONS;
+    if (glfwGetKey(window, GLFW_KEY_SPACE) == GLFW_PRESS) G_Menu = GAME;
+    if (glfwGetKey(window, GLFW_KEY_0) == GLFW_PRESS) G_Menu = TEST_MENU;
+
+    Draw_Pong_Logo();
+  }
+  if (G_Menu == GAME) {
+    // Key Check
+    if (glfwGetKey(window, GLFW_KEY_SPACE) == GLFW_RELEASE) unlock_game = 1;
+    if (glfwGetKey(window, GLFW_KEY_H) == GLFW_PRESS) hide_help = 1;
+
+    if (unlock_game) {
+      Keystroke(window, &Ball, &Left_Rack, &Right_Rack, dy_change);
+
+      Ball_Collide(&Ball, &Left_Rack, &Right_Rack, &Score);
+      Increase_Speedmult(&Ball);
     }
 
-    if (G_Menu == MAIN_MENU) {
-      if (glfwGetKey(window, GLFW_KEY_ESCAPE) == GLFW_PRESS)
-        glfwSetWindowShouldClose(window, 1);
-      if (glfwGetKey(window, GLFW_KEY_O) == GLFW_PRESS) G_Menu = OPTIONS;
-      if (glfwGetKey(window, GLFW_KEY_SPACE) == GLFW_PRESS) G_Menu = GAME;
-      if (glfwGetKey(window, GLFW_KEY_0) == GLFW_PRESS) G_Menu = TEST_MENU;
+    if (!hide_help) Draw_Help();
+    Draw_Score(Score);
+    Draw_Racket(Left_Rack);
+    Draw_Racket(Right_Rack);
+    Draw_Ball(Ball);
 
-      Draw_Pong_Logo();
+    if (Score.Player_1 >= final_score || Score.Player_2 >= final_score) {
+      G_Menu = WIN;
     }
-    if (G_Menu == GAME) {
-      // Key Check
-      if (glfwGetKey(window, GLFW_KEY_SPACE) == GLFW_RELEASE) unlock_game = 1;
-      if (glfwGetKey(window, GLFW_KEY_H) == GLFW_PRESS) hide_help = 1;
+  }
+  if (G_Menu == WIN) {
+    if (glfwGetKey(window, GLFW_KEY_ESCAPE) == GLFW_PRESS)
+      glfwSetWindowShouldClose(window, 1);
 
-      if (unlock_game) {
-        Keystroke(window, &Ball, &Left_Rack, &Right_Rack, dy_change);
-
-        Ball_Collide(&Ball, &Left_Rack, &Right_Rack, &Score);
-        Increase_Speedmult(&Ball);
-      }
-
-      if (!hide_help) Draw_Help();
-      Draw_Score(Score);
+    if (Score.Player_1 >= final_score) {
+      Draw_P1W();
+    } else {
+      Draw_P2W();
+    }
+  }
+  if (G_Menu == TEST_MENU) {
+    if (glfwGetKey(window, GLFW_KEY_ESCAPE) == GLFW_PRESS)
+      glfwSetWindowShouldClose(window, 1);
+    if (glfwGetKey(window, GLFW_KEY_1) == GLFW_PRESS) Draw_Char_Test();
+    if (glfwGetKey(window, GLFW_KEY_2) == GLFW_PRESS) Draw_Pong_Logo();
+    if (glfwGetKey(window, GLFW_KEY_3) == GLFW_PRESS) Draw_P1W();
+    if (glfwGetKey(window, GLFW_KEY_4) == GLFW_PRESS) Draw_P2W();
+    if (glfwGetKey(window, GLFW_KEY_5) == GLFW_PRESS) Draw_Score(Score);
+    if (glfwGetKey(window, GLFW_KEY_6) == GLFW_PRESS) Draw_Help();
+    if (glfwGetKey(window, GLFW_KEY_7) == GLFW_PRESS) {
       Draw_Racket(Left_Rack);
       Draw_Racket(Right_Rack);
       Draw_Ball(Ball);
-
-      if (Score.Player_1 >= final_score || Score.Player_2 >= final_score) {
-        G_Menu = WIN;
-      }
     }
-    if (G_Menu == WIN) {
-      if (glfwGetKey(window, GLFW_KEY_ESCAPE) == GLFW_PRESS)
-        glfwSetWindowShouldClose(window, 1);
+  }
 
-      if (Score.Player_1 >= final_score) {
-        Draw_P1W();
-      } else {
-        Draw_P2W();
-      }
-    }
-    if (G_Menu == TEST_MENU) {
-      if (glfwGetKey(window, GLFW_KEY_ESCAPE) == GLFW_PRESS)
-        glfwSetWindowShouldClose(window, 1);
-      if (glfwGetKey(window, GLFW_KEY_1) == GLFW_PRESS) Draw_Char_Test();
-      if (glfwGetKey(window, GLFW_KEY_2) == GLFW_PRESS) Draw_Pong_Logo();
-      if (glfwGetKey(window, GLFW_KEY_3) == GLFW_PRESS) Draw_P1W();
-      if (glfwGetKey(window, GLFW_KEY_4) == GLFW_PRESS) Draw_P2W();
-      if (glfwGetKey(window, GLFW_KEY_5) == GLFW_PRESS) Draw_Score(Score);
-      if (glfwGetKey(window, GLFW_KEY_6) == GLFW_PRESS) Draw_Help();
-      if (glfwGetKey(window, GLFW_KEY_7) == GLFW_PRESS) {
-        Draw_Racket(Left_Rack);
-        Draw_Racket(Right_Rack);
-        Draw_Ball(Ball);
-      }
-    }
-
-    // Swap buffers
-    glfwSwapBuffers(window);
-    glfwPollEvents();
-  
+  // Swap buffers
+  glfwSwapBuffers(window);
+  glfwPollEvents();
 }
 
-void Render_FPS() { 
-    Ball_Init();
+void Render_FPS() {
+  Ball_Init();
 
-    previousSecond = previousTime = glfwGetTime();
+  previousSecond = previousTime = glfwGetTime();
 
   while (!glfwWindowShouldClose(window)) {
     currentTime = glfwGetTime();
@@ -589,8 +591,7 @@ void Draw_Char_Test() {
 
   for (int i = 6, character = 'A'; i > -1; i -= 6) {
     for (int j = -57; j < -3; j += 4, character++) {
-      if (character == 'M' || character == 'W')
-        j += 1;
+      if (character == 'M' || character == 'W') j += 1;
       Draw_Letter(character, j, i);
       if (character == 'G' || character == 'N' || character == 'O' ||
           character == 'Q' || character == 'M' || character == 'W')
@@ -765,21 +766,6 @@ void Draw_Help() {
   Draw_Letter('P', 69 + x_pos, 0 + y_pos);
 }
 
-void Draw_FPS(int framerate) {
-  size = 1;
-  Set_Text_Color(0.2, 0.3, 0.4);
-  if (framerate < 10) {
-    Draw_Num(framerate, 0, 0);
-  } else if (framerate < 100) {
-    Draw_Num(framerate / 10, -5, 0);
-    Draw_Num(framerate % 10, 0, 0);
-  } else if (framerate < 1000) {
-    Draw_Num(framerate / 100, -10, 0);
-    Draw_Num((framerate % 100) / 10, -5, 0);
-    Draw_Num(framerate % 10, 0, 0);
-  }
-}
-
 void Draw_Pong_Logo() {
   float x_pos = -7, y_pos = 6;
   size = 2;
@@ -834,54 +820,53 @@ void Draw_Pixel(float x, float y) {
 
 void Draw_Num(int num, float x, float y) {
   switch (num) {
-  case 0: {
-    Draw_0(x, y);
-    break;
-  }
-  case 1: {
-    Draw_1(x, y);
-    break;
-  }
-  case 2: {
-    Draw_2(x, y);
-    break;
-  }
-  case 3: {
-    Draw_3(x, y);
-    break;
-  }
-  case 4: {
-    Draw_4(x, y);
-    break;
-  }
-  case 5: {
-    Draw_5(x, y);
-    break;
-  }
-  case 6: {
-    Draw_6(x, y);
-    break;
-  }
-  case 7: {
-    Draw_7(x, y);
-    break;
-  }
-  case 8: {
-    Draw_8(x, y);
-    break;
-  }
-  case 9: {
-    Draw_9(x, y);
-    break;
-  }
+    case 0: {
+      Draw_0(x, y);
+      break;
+    }
+    case 1: {
+      Draw_1(x, y);
+      break;
+    }
+    case 2: {
+      Draw_2(x, y);
+      break;
+    }
+    case 3: {
+      Draw_3(x, y);
+      break;
+    }
+    case 4: {
+      Draw_4(x, y);
+      break;
+    }
+    case 5: {
+      Draw_5(x, y);
+      break;
+    }
+    case 6: {
+      Draw_6(x, y);
+      break;
+    }
+    case 7: {
+      Draw_7(x, y);
+      break;
+    }
+    case 8: {
+      Draw_8(x, y);
+      break;
+    }
+    case 9: {
+      Draw_9(x, y);
+      break;
+    }
   }
 }
 
 void Draw_0(float x, float y) {
   for (float i = -2 + y; i < 3 + y; i++) {
     for (float j = -1 + x; j < 2 + x; j++) {
-      if (!(j == x && (i < (2 + y) && i > (-2 + y))))
-        Draw_Pixel(j, i);
+      if (!(j == x && (i < (2 + y) && i > (-2 + y)))) Draw_Pixel(j, i);
     }
   }
 }
@@ -949,8 +934,7 @@ void Draw_6(float x, float y) {
 void Draw_7(float x, float y) {
   for (float i = -2 + y; i < 3 + y; i++) {
     for (float j = -1 + x; j < 2 + x; j++) {
-      if (i == (2 + y) || j == (1 + x))
-        Draw_Pixel(j, i);
+      if (i == (2 + y) || j == (1 + x)) Draw_Pixel(j, i);
     }
   }
 }
@@ -958,8 +942,7 @@ void Draw_7(float x, float y) {
 void Draw_8(float x, float y) {
   for (float i = -2 + y; i < 3 + y; i++) {
     for (float j = -1 + x; j < 2 + x; j++) {
-      if (!(j == x && (i == -1 + y || i == 1 + y)))
-        Draw_Pixel(j, i);
+      if (!(j == x && (i == -1 + y || i == 1 + y))) Draw_Pixel(j, i);
     }
   }
 }
@@ -976,214 +959,214 @@ void Draw_9(float x, float y) {
 
 void Draw_Letter(char character, float x, float y) {
   switch (character) {
-  case 'A': {
-    Draw_A(x, y);
-    break;
-  }
-  case 'a': {
-    Draw_A(x, y);
-    break;
-  }
-  case 'B': {
-    Draw_B(x, y);
-    break;
-  }
-  case 'b': {
-    Draw_B(x, y);
-    break;
-  }
-  case 'C': {
-    Draw_C(x, y);
-    break;
-  }
-  case 'c': {
-    Draw_C(x, y);
-    break;
-  }
-  case 'D': {
-    Draw_D(x, y);
-    break;
-  }
-  case 'd': {
-    Draw_D(x, y);
-    break;
-  }
-  case 'E': {
-    Draw_E(x, y);
-    break;
-  }
-  case 'e': {
-    Draw_E(x, y);
-    break;
-  }
-  case 'F': {
-    Draw_F(x, y);
-    break;
-  }
-  case 'f': {
-    Draw_F(x, y);
-    break;
-  }
-  case 'G': {
-    Draw_G(x, y);
-    break;
-  }
-  case 'g': {
-    Draw_G(x, y);
-    break;
-  }
-  case 'H': {
-    Draw_H(x, y);
-    break;
-  }
-  case 'h': {
-    Draw_H(x, y);
-    break;
-  }
-  case 'I': {
-    Draw_I(x, y);
-    break;
-  }
-  case 'i': {
-    Draw_I(x, y);
-    break;
-  }
-  case 'J': {
-    Draw_J(x, y);
-    break;
-  }
-  case 'j': {
-    Draw_J(x, y);
-    break;
-  }
-  case 'K': {
-    Draw_K(x, y);
-    break;
-  }
-  case 'k': {
-    Draw_K(x, y);
-    break;
-  }
-  case 'L': {
-    Draw_L(x, y);
-    break;
-  }
-  case 'l': {
-    Draw_L(x, y);
-    break;
-  }
-  case 'M': {
-    Draw_M(x, y);
-    break;
-  }
-  case 'm': {
-    Draw_M(x, y);
-    break;
-  }
-  case 'N': {
-    Draw_N(x, y);
-    break;
-  }
-  case 'n': {
-    Draw_N(x, y);
-    break;
-  }
-  case 'O': {
-    Draw_O(x, y);
-    break;
-  }
-  case 'o': {
-    Draw_O(x, y);
-    break;
-  }
-  case 'P': {
-    Draw_P(x, y);
-    break;
-  }
-  case 'p': {
-    Draw_P(x, y);
-    break;
-  }
-  case 'Q': {
-    Draw_Q(x, y);
-    break;
-  }
-  case 'q': {
-    Draw_Q(x, y);
-    break;
-  }
-  case 'R': {
-    Draw_R(x, y);
-    break;
-  }
-  case 'r': {
-    Draw_R(x, y);
-    break;
-  }
-  case 'S': {
-    Draw_S(x, y);
-    break;
-  }
-  case 's': {
-    Draw_S(x, y);
-    break;
-  }
-  case 'T': {
-    Draw_T(x, y);
-    break;
-  }
-  case 't': {
-    Draw_T(x, y);
-    break;
-  }
-  case 'U': {
-    Draw_U(x, y);
-    break;
-  }
-  case 'u': {
-    Draw_U(x, y);
-    break;
-  }
-  case 'V': {
-    Draw_V(x, y);
-    break;
-  }
-  case 'v': {
-    Draw_V(x, y);
-    break;
-  }
-  case 'W': {
-    Draw_W(x, y);
-    break;
-  }
-  case 'w': {
-    Draw_W(x, y);
-    break;
-  }
-  case 'X': {
-    Draw_X(x, y);
-    break;
-  }
-  case 'x': {
-    Draw_X(x, y);
-    break;
-  }
-  case 'Y': {
-    Draw_Y(x, y);
-    break;
-  }
-  case 'y': {
-    Draw_Y(x, y);
-    break;
-  }
-  case 'Z': {
-    Draw_Z(x, y);
-    break;
-  }
-  case 'z': {
-    Draw_Z(x, y);
-    break;
-  }
+    case 'A': {
+      Draw_A(x, y);
+      break;
+    }
+    case 'a': {
+      Draw_A(x, y);
+      break;
+    }
+    case 'B': {
+      Draw_B(x, y);
+      break;
+    }
+    case 'b': {
+      Draw_B(x, y);
+      break;
+    }
+    case 'C': {
+      Draw_C(x, y);
+      break;
+    }
+    case 'c': {
+      Draw_C(x, y);
+      break;
+    }
+    case 'D': {
+      Draw_D(x, y);
+      break;
+    }
+    case 'd': {
+      Draw_D(x, y);
+      break;
+    }
+    case 'E': {
+      Draw_E(x, y);
+      break;
+    }
+    case 'e': {
+      Draw_E(x, y);
+      break;
+    }
+    case 'F': {
+      Draw_F(x, y);
+      break;
+    }
+    case 'f': {
+      Draw_F(x, y);
+      break;
+    }
+    case 'G': {
+      Draw_G(x, y);
+      break;
+    }
+    case 'g': {
+      Draw_G(x, y);
+      break;
+    }
+    case 'H': {
+      Draw_H(x, y);
+      break;
+    }
+    case 'h': {
+      Draw_H(x, y);
+      break;
+    }
+    case 'I': {
+      Draw_I(x, y);
+      break;
+    }
+    case 'i': {
+      Draw_I(x, y);
+      break;
+    }
+    case 'J': {
+      Draw_J(x, y);
+      break;
+    }
+    case 'j': {
+      Draw_J(x, y);
+      break;
+    }
+    case 'K': {
+      Draw_K(x, y);
+      break;
+    }
+    case 'k': {
+      Draw_K(x, y);
+      break;
+    }
+    case 'L': {
+      Draw_L(x, y);
+      break;
+    }
+    case 'l': {
+      Draw_L(x, y);
+      break;
+    }
+    case 'M': {
+      Draw_M(x, y);
+      break;
+    }
+    case 'm': {
+      Draw_M(x, y);
+      break;
+    }
+    case 'N': {
+      Draw_N(x, y);
+      break;
+    }
+    case 'n': {
+      Draw_N(x, y);
+      break;
+    }
+    case 'O': {
+      Draw_O(x, y);
+      break;
+    }
+    case 'o': {
+      Draw_O(x, y);
+      break;
+    }
+    case 'P': {
+      Draw_P(x, y);
+      break;
+    }
+    case 'p': {
+      Draw_P(x, y);
+      break;
+    }
+    case 'Q': {
+      Draw_Q(x, y);
+      break;
+    }
+    case 'q': {
+      Draw_Q(x, y);
+      break;
+    }
+    case 'R': {
+      Draw_R(x, y);
+      break;
+    }
+    case 'r': {
+      Draw_R(x, y);
+      break;
+    }
+    case 'S': {
+      Draw_S(x, y);
+      break;
+    }
+    case 's': {
+      Draw_S(x, y);
+      break;
+    }
+    case 'T': {
+      Draw_T(x, y);
+      break;
+    }
+    case 't': {
+      Draw_T(x, y);
+      break;
+    }
+    case 'U': {
+      Draw_U(x, y);
+      break;
+    }
+    case 'u': {
+      Draw_U(x, y);
+      break;
+    }
+    case 'V': {
+      Draw_V(x, y);
+      break;
+    }
+    case 'v': {
+      Draw_V(x, y);
+      break;
+    }
+    case 'W': {
+      Draw_W(x, y);
+      break;
+    }
+    case 'w': {
+      Draw_W(x, y);
+      break;
+    }
+    case 'X': {
+      Draw_X(x, y);
+      break;
+    }
+    case 'x': {
+      Draw_X(x, y);
+      break;
+    }
+    case 'Y': {
+      Draw_Y(x, y);
+      break;
+    }
+    case 'y': {
+      Draw_Y(x, y);
+      break;
+    }
+    case 'Z': {
+      Draw_Z(x, y);
+      break;
+    }
+    case 'z': {
+      Draw_Z(x, y);
+      break;
+    }
   }
 }
 
@@ -1263,8 +1246,7 @@ void Draw_G(float x, float y) {
 void Draw_H(float x, float y) {
   for (float i = -2 + y; i < 3 + y; i++) {
     for (float j = -1 + x; j < 2 + x; j++) {
-      if (j == (-1 + x) || j == (1 + x) || i == (y))
-        Draw_Pixel(j, i);
+      if (j == (-1 + x) || j == (1 + x) || i == (y)) Draw_Pixel(j, i);
     }
   }
 }
@@ -1272,8 +1254,7 @@ void Draw_H(float x, float y) {
 void Draw_I(float x, float y) {
   for (float i = -2 + y; i < 3 + y; i++) {
     for (float j = -1 + x; j < 2 + x; j++) {
-      if (i == (-2 + y) || i == (2 + y) || j == (x))
-        Draw_Pixel(j, i);
+      if (i == (-2 + y) || i == (2 + y) || j == (x)) Draw_Pixel(j, i);
     }
   }
 }
@@ -1300,8 +1281,7 @@ void Draw_K(float x, float y) {
 void Draw_L(float x, float y) {
   for (float i = -2 + y; i < 3 + y; i++) {
     for (float j = -1 + x; j < 2 + x; j++) {
-      if (j == (-1 + x) || i == (-2 + y))
-        Draw_Pixel(j, i);
+      if (j == (-1 + x) || i == (-2 + y)) Draw_Pixel(j, i);
     }
   }
 }
@@ -1384,8 +1364,7 @@ void Draw_S(float x, float y) {
 void Draw_T(float x, float y) {
   for (float i = -2 + y; i < 3 + y; i++) {
     for (float j = -1 + x; j < 2 + x; j++) {
-      if (i == (2 + y) || j == x)
-        Draw_Pixel(j, i);
+      if (i == (2 + y) || j == x) Draw_Pixel(j, i);
     }
   }
 }
@@ -1442,8 +1421,7 @@ void Draw_Y(float x, float y) {
 void Draw_Z(float x, float y) {
   for (float i = -2 + y; i < 3 + y; i++) {
     for (float j = -1 + x; j < 2 + x; j++) {
-      if (i == (-2 + y) || i == (2 + y) || i - y == j - x)
-        Draw_Pixel(j, i);
+      if (i == (-2 + y) || i == (2 + y) || i - y == j - x) Draw_Pixel(j, i);
     }
   }
 }
@@ -1457,8 +1435,7 @@ void Draw_Colon(float x, float y) {
 void Draw_Exclamination(float x, float y) {
   for (float i = -2 + y; i < 3 + y; i++) {
     for (float j = -1 + x; j < 2 + x; j++) {
-      if (j == x && i != (-1 + y))
-        Draw_Pixel(j, i);
+      if (j == x && i != (-1 + y)) Draw_Pixel(j, i);
     }
   }
 }
@@ -1483,9 +1460,9 @@ int Left_Racket_Collide(T_Ball *ball, T_Racket *Left_Rack) {
     collide = (((ball->x - ball->radius + ball->dx * ball->speedmult) <
                 (Left_Rack->x + Left_Rack->x_size / 2)) &&
                ((ball->y - ball->radius /** sin_y*/) <
-                    (Left_Rack->y + Left_Rack->y_size / 2) * ratio
-                && (ball->y + ball->radius /** sin_y*/) >
-                       (Left_Rack->y - Left_Rack->y_size / 2)  * ratio));
+                    (Left_Rack->y + Left_Rack->y_size / 2) * ratio &&
+                (ball->y + ball->radius /** sin_y*/) >
+                    (Left_Rack->y - Left_Rack->y_size / 2) * ratio));
   }
 
   return collide;
@@ -1504,9 +1481,9 @@ int Right_Racket_Collide(T_Ball *ball, T_Racket *Right_Rack) {
     collide = (((ball->x + ball->radius + ball->dx * ball->speedmult) >
                 (Right_Rack->x - Right_Rack->x_size / 2)) &&
                ((ball->y - ball->radius /** sin_y*/) <
-                    (Right_Rack->y + Right_Rack->y_size / 2) * ratio
-                && (ball->y + ball->radius /** sin_y*/) >
-                       (Right_Rack->y - Right_Rack->y_size / 2) * ratio));
+                    (Right_Rack->y + Right_Rack->y_size / 2) * ratio &&
+                (ball->y + ball->radius /** sin_y*/) >
+                    (Right_Rack->y - Right_Rack->y_size / 2) * ratio));
   }
 
   return collide;
@@ -1531,13 +1508,11 @@ int Border_X_Right_Collide(T_Ball *ball) {
 }
 
 int Border_Y_Up_Collide(T_Ball *ball) {
-  return (ball->y + ball->dy * ball->speedmult >
-          (1 - ball->radius * ratio));
+  return (ball->y + ball->dy * ball->speedmult > (1 - ball->radius * ratio));
 }
 
 int Border_Y_Down_Collide(T_Ball *ball) {
-  return (ball->y + ball->dy * ball->speedmult <
-          (-1 + ball->radius * ratio));
+  return (ball->y + ball->dy * ball->speedmult < (-1 + ball->radius * ratio));
 }
 
 int Border_X_Collide(T_Ball *ball) {
@@ -1598,21 +1573,21 @@ void Reset_Round(T_Ball *ball, T_Racket *Left_Rack, T_Racket *Right_Rack) {
 
 void Keystroke(GLFWwindow *window, T_Ball *ball, T_Racket *Left_Rack,
                T_Racket *Right_Rack, float dy_change) {
-    if (glfwGetKey(window, GLFW_KEY_A) == GLFW_PRESS)
-    if (Left_Rack->y + dy_change < (1 - Left_Rack->y_size * ratio / 2 -
-                                    Left_Rack->x_size / 2) / ratio)
+  if (glfwGetKey(window, GLFW_KEY_A) == GLFW_PRESS)
+    if (Left_Rack->y + dy_change <
+        (1 - Left_Rack->y_size * ratio / 2 - Left_Rack->x_size / 2) / ratio)
       Move_Racket(Left_Rack, dy_change);
   if (glfwGetKey(window, GLFW_KEY_Z) == GLFW_PRESS)
-    if (Left_Rack->y - dy_change > (-1 + Left_Rack->y_size * ratio / 2 +
-                                    Left_Rack->x_size / 2) / ratio)
+    if (Left_Rack->y - dy_change >
+        (-1 + Left_Rack->y_size * ratio / 2 + Left_Rack->x_size / 2) / ratio)
       Move_Racket(Left_Rack, -dy_change);
   if (glfwGetKey(window, GLFW_KEY_K) == GLFW_PRESS)
-    if (Right_Rack->y + dy_change < (1 - Right_Rack->y_size * ratio / 2 -
-                                     Right_Rack->x_size / 2) / ratio)
+    if (Right_Rack->y + dy_change <
+        (1 - Right_Rack->y_size * ratio / 2 - Right_Rack->x_size / 2) / ratio)
       Move_Racket(Right_Rack, dy_change);
   if (glfwGetKey(window, GLFW_KEY_M) == GLFW_PRESS)
-    if (Right_Rack->y - dy_change > (-1 + Right_Rack->y_size * ratio / 2 +
-                                     Right_Rack->x_size / 2) / ratio)
+    if (Right_Rack->y - dy_change >
+        (-1 + Right_Rack->y_size * ratio / 2 + Right_Rack->x_size / 2) / ratio)
       Move_Racket(Right_Rack, -dy_change);
   if (glfwGetKey(window, GLFW_KEY_R) == GLFW_PRESS) {
     Reset_Round(ball, Left_Rack, Right_Rack);
@@ -1643,7 +1618,8 @@ void Draw_Racket(T_Racket racket) {
   glEnd();
   glBegin(GL_POLYGON);
   for (float i = 0; i < 360; i++) {
-    glVertex2d((cos(DEG2RAD * i) * racket.x_size / 2 + racket.x),
+    glVertex2d(
+        (cos(DEG2RAD * i) * racket.x_size / 2 + racket.x),
         (sin(DEG2RAD * i) * racket.x_size / 2 + racket.y_size / 2 + racket.y) *
             ratio);
   }
