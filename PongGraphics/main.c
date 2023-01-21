@@ -598,8 +598,8 @@ void Draw_Char_Test() {
     }
   }
 
-  Draw_Colon(-57, -6);
-  Draw_Exclamination(-53, -6);
+  Draw_Colon(-58, -6);
+  Draw_Exclamination(-54, -6);
 }
 
 void Draw_P1W() {
