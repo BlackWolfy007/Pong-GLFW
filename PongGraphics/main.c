@@ -190,6 +190,12 @@ void Set_Text_Color(float r, float g, float b);
 // Draws a pixel polygon
 void Draw_Pixel(float x, float y);
 
+// Draws grid pixel
+void Draw_Grid_Pixel(float x, float y);
+
+// Draws grid
+void Draw_Grid();
+
 // -----------------------------------
 // Character decision functions
 // -----------------------------------
@@ -600,6 +606,8 @@ void Draw_Char_Test() {
 
   Draw_Colon(-58, -6);
   Draw_Exclamination(-56, -6);
+
+  Draw_Grid();
 }
 
 void Draw_P1W() {
@@ -830,6 +838,30 @@ void Draw_Pixel(float x, float y) {
   glVertex2d((0.5 + x) * grid_coeff * size / ratio,
              (-0.5 + y) * grid_coeff * size);
   glEnd();
+}
+
+void Draw_Grid_Pixel(float x, float y) {
+  glColor3f(1, 0, 0);
+  glBegin(GL_LINE_LOOP);
+  glVertex2d((-0.5 + x) * grid_coeff * size / ratio,
+             (-0.5 + y) * grid_coeff * size);
+  glVertex2d((-0.5 + x) * grid_coeff * size / ratio,
+             (0.5 + y) * grid_coeff * size);
+  glVertex2d((0.5 + x) * grid_coeff * size / ratio,
+             (0.5 + y) * grid_coeff * size);
+  glVertex2d((0.5 + x) * grid_coeff * size / ratio,
+             (-0.5 + y) * grid_coeff * size);
+  glEnd();
+}
+
+void Draw_Grid() {
+  float size_x = 60, size_y = 22;
+  for (float i = -size_y; i <= size_y; i++) {
+    for (float j = -size_x; j <= size_x;
+         j++) {
+      Draw_Grid_Pixel(j, i);
+    }
+  }
 }
 
 void Draw_Num(int num, float x, float y) {
