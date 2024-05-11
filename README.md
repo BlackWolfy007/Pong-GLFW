@@ -5,7 +5,7 @@
 The easiest way to get hold of the pong glfw is to run the following command using a shell you can run git from:
 
 ```
-git clone --recursive https://github.com/juliettef/GLFW-CMake-starter
+git clone --recursive https://github.com/b3r8t3r/Pong-GLFW.git
 ```
 
 ## Using CMake to create the project
